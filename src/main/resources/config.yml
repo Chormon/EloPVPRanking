@@ -1,0 +1,22 @@
+# ustawienia
+settings:
+  startingPoints: 1000
+  constantValue: 32
+  playersTop: 21
+  playersPerPage: 7
+  # "inf" (nieskończoność) lub dowolna liczba całkowita
+  maxPoints: "inf"
+  # "-inf" (minus nieskończoność) lub dowolna liczba całkowita
+  minPoints: 0
+
+# wiadomosci
+messages:
+  elo: "&aMasz {0} punktow elo i jestes na {1} miejscu w rankingu."
+  eloOther: "&aGracz {0} ma {1} punktow elo i jest na {2} miejscu w rankingu."
+  error: "&4Stalo sie cos zlego i nie mozna wykonac tej komendy. Jesli to sie powtorzy, skontaktuj sie z administracja serwera!"
+  playerNotExist: "&4Gracz {0} nie istnieje!"
+  topHeader: "&2-----[&f Top {0} graczy w rankingu Elo &2]-----"
+  top: "&7{0}. &2{1} &7- &f{2} pkt."
+  topMore: "&2Wiecej &7- &f/elotop {0}"
+  lostPoints: "Straciles {0} puntkow i masz ich teraz {1}. Jestes na {2} miejscu w rankingu."
+  gainedPoints: "Zdobyles {0} puntkow i masz ich teraz {1}. Jestes na {2} miejscu w rankingu."
