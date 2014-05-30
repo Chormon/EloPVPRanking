@@ -114,7 +114,7 @@ public class EloPVPRanking extends JavaPlugin {
             if (page > pages) {
                 mypage = pages - 1;
                 perpage = last;
-                start = perpage * (mypage - 1);
+                start = perpage * mypage;
             }
             int i = 0, cnt = 0;
             EloPlayer[] top = new EloPlayer[perpage];
