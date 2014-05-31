@@ -115,21 +115,9 @@ public class EloFile {
         String section = "players."+player.getUniqueId();
         this.fileConfiguration.set(section+".name", player.getName());
         this.fileConfiguration.set(section+".elopoints", player.getEloPoints());
-        this.fileConfiguration.set(section+".rank", player.getRanking());
+        this.fileConfiguration.set(section+".kills", player.getKills());
+        this.fileConfiguration.set(section+".deaths", player.getDeaths());
         saveConfig();
-    }
-    
-    public void setRanking() {
-        saveConfig();
-    }
-    
-    public void getRanking() {
-        String path = "players";
-        Set<String> players = this.fileConfiguration.getConfigurationSection(path).getKeys(false);
-        SortedSet<Integer> eloPoints = new TreeSet<>();
-        for(String p : players) {
-            eloPoints.add(this.fileConfiguration.getInt(path + "." + p));
-        }
     }
     
     public boolean playerExists(EloPlayer player) {
@@ -143,12 +131,9 @@ public class EloFile {
             return null;
         String name = this.fileConfiguration.getString(path + ".name");
         int eloPoints = this.fileConfiguration.getInt(path + ".elopoints");
-        return new EloPlayer(uniqueId, name, eloPoints);
-    }
-    
-    public int getEloPoints(EloPlayer player) {
-        String path = "players."+player.getUniqueId();
-        return this.fileConfiguration.getInt(path+".elopoints");
+        int kills = this.fileConfiguration.getInt(path+".kills");
+        int deaths = this.fileConfiguration.getInt(path+".deaths");
+        return new EloPlayer(uniqueId, name, eloPoints, kills, deaths);
     }
     
     public TreeMap<String, EloPlayer> getPlayers() {
@@ -158,7 +143,7 @@ public class EloFile {
             Set<String> uuids = this.fileConfiguration.getConfigurationSection("players").getKeys(false);
 
             for(String s : uuids) {
-                EloPlayer ep = new EloPlayer(UUID.fromString(s), this.fileConfiguration.getString("players."+s+".name"), this.fileConfiguration.getInt("players."+s+".elopoints"));
+                EloPlayer ep = new EloPlayer(UUID.fromString(s), this.fileConfiguration.getString("players."+s+".name"), this.fileConfiguration.getInt("players."+s+".elopoints"), this.fileConfiguration.getInt("players."+s+".kills"), this.fileConfiguration.getInt("players."+s+".deaths"));
                 players.put(ep.getName().toLowerCase(), ep);
             }
 

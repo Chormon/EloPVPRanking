@@ -55,6 +55,7 @@ public class EloPVPRanking extends JavaPlugin {
         }
         getCommand("Elo").setExecutor(new Elo());
         getCommand("Elotop").setExecutor(new EloTop());
+        getCommand("EloReload").setExecutor(new EloReload());
         getLogger().log(Level.INFO, "{0} {1} enabled!", new Object[]{pdf.getName(), pdf.getVersion()});
     }
 

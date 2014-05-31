@@ -1,5 +1,5 @@
 name: EloPVPRanking
-description: Mojang server authentication while running offline server.
+description: Ranking PVP na podstawie punktów Elo.
 main: pl.chormon.elopvpranking.EloPVPRanking
 author: Chormon
 version: "${project.version}"
@@ -12,6 +12,10 @@ commands:
     description: Top graczy w rankingu ELO
     permission: elopvpranking.elotop
     usage: /<command> [strona]
+  eloreload:
+    description: Przeladowuje plugin
+    permissions: elopvpranking.eloreload
+    usage: /<command>
 permissions:
   elopvpranking.*:
     description: Pozwala na uzycie wszystkich komend pluginu EloPVPRating
@@ -30,4 +34,7 @@ permissions:
   elopvpranking.elotop:
     description: Pozwala na sprawdzenie topki rankingu ELO
     default: true
+  elopvpranking.eloreload:
+    description: Pozwala na przeladowanie pluginu
+    default: op
       

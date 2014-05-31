@@ -11,8 +11,10 @@ settings:
 
 # wiadomosci
 messages:
-  elo: "&aMasz {0} punktow elo i jestes na {1} miejscu w rankingu."
-  eloOther: "&aGracz {0} ma {1} punktow elo i jest na {2} miejscu w rankingu."
+  eloHeader: "&2Twoje statystyki PVP:"
+  eloHeaderOther: "&2Statystyki PVP gracza &f{0}&2:"
+  eloKills: "&2Ilosc zabojstw/Ilosc smierci: &f{0}/{1} (&2KDR: &f{2})"
+  eloPoints: "&2Punkty: &f{0} &2(&f{1} &2miejsce w rankingu)"
   error: "&4Stalo sie cos zlego i nie mozna wykonac tej komendy. Jesli to sie powtorzy, skontaktuj sie z administracja serwera!"
   playerNotExist: "&4Gracz {0} nie istnieje!"
   topHeader: "&2-----[&f Top {0} graczy w rankingu Elo &2]-----"

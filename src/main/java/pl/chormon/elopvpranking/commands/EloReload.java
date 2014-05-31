@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package pl.chormon.elopvpranking.commands;
 
+import java.util.logging.Level;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import pl.chormon.elopvpranking.Config;
 import pl.chormon.elopvpranking.EloPVPRanking;
 import pl.chormon.elopvpranking.EloPlayer;
 
@@ -35,39 +35,21 @@ import pl.chormon.elopvpranking.EloPlayer;
  *
  * @author Chormon
  */
-public class Elo implements CommandExecutor {
+public class EloReload implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if(args.length > 0)
+            return false;
         EloPVPRanking plugin = EloPVPRanking.get();
-        if (args.length > 0) {
-            if (args.length > 1) {
-                return false;
-            }
-            String name = args[0].toLowerCase();
-            if (sender.hasPermission("elopvpranking.elo.others") || !(sender instanceof Player)) {
-                EloPlayer ep = plugin.eloPlayers.get(name);
-                if (ep == null) {
-                    sender.sendMessage(Config.getMessage("playerNotExist", name));
-                    return true;
-                }
-                sender.sendMessage(Config.getMessage("eloHeaderOther", ep.getName()));
-                sender.sendMessage(Config.getMessage("eloKills", ep.getKills(), ep.getDeaths(), ep.getKDR()));
-                sender.sendMessage(Config.getMessage("eloPoints", ep.getEloPoints(), ep.getRanking()));
-                return true;
-            }
-        } else if (sender instanceof Player) {
-            EloPlayer ep = plugin.eloPlayers.get(((Player) sender).getName().toLowerCase());
-            if (ep != null) {
-                sender.sendMessage(Config.getMessage("eloHeader"));
-                sender.sendMessage(Config.getMessage("eloKills", ep.getKills(), ep.getDeaths(), ep.getKDR()));
-                sender.sendMessage(Config.getMessage("eloPoints", ep.getEloPoints(), ep.getRanking()));
-            } else {
-                sender.sendMessage(Config.getMessage("error"));
-            }
-            return true;
-        }
-        return false;
+        plugin.reloadConfig();
+        plugin.eloPlayers.clear();
+        plugin.getEloFile().reloadConfig();
+        plugin.eloPlayers.putAll(plugin.getEloFile().getPlayers());
+        plugin.getLogger().log(Level.INFO, "Plugin reloaded!");
+        for(EloPlayer ep : plugin.eloPlayers.values())
+            plugin.getLogger().log(Level.INFO, ep.toString());
+        return true;
     }
-
+    
 }
