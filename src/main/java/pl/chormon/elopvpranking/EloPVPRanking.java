@@ -26,12 +26,10 @@ package pl.chormon.elopvpranking;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import pl.chormon.elopvpranking.commands.*;
 import pl.chormon.elopvprating.listeners.PlayerListeners;
 
 /**
@@ -55,6 +53,8 @@ public class EloPVPRanking extends JavaPlugin {
         if (eloPlayers == null) {
             eloPlayers = new TreeMap<>();
         }
+        getCommand("Elo").setExecutor(new Elo());
+        getCommand("Elotop").setExecutor(new EloTop());
         getLogger().log(Level.INFO, "{0} {1} enabled!", new Object[]{pdf.getName(), pdf.getVersion()});
     }
 
@@ -63,80 +63,6 @@ public class EloPVPRanking extends JavaPlugin {
         PluginDescriptionFile pdf = this.getDescription();
         HandlerList.unregisterAll(this);
         getLogger().log(Level.INFO, "{0} {1} disabled!", new Object[]{pdf.getName(), pdf.getVersion()});
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("elo")) {
-            if (args.length > 0) {
-                if (args.length > 1) {
-                    return false;
-                }
-                String name = args[0].toLowerCase();
-                if (sender.hasPermission("elopvpranking.elo.others") || !(sender instanceof Player)) {
-                    EloPlayer ep = eloPlayers.get(name);
-                    if (ep == null) {
-                        sender.sendMessage(Config.getMessage("playerNotExist", name));
-                        return true;
-                    }
-                    sender.sendMessage(Config.getMessage("eloOther", ep.getName(), ep.getEloPoints(), calculateRanking(ep.getName())));
-                    return true;
-                }
-            } else if (sender instanceof Player) {
-                EloPlayer ep = eloPlayers.get(((Player) sender).getName().toLowerCase());
-                if (ep != null) {
-                    sender.sendMessage(Config.getMessage("elo", ep.getEloPoints(), calculateRanking(ep.getName())));
-                } else {
-                    sender.sendMessage(Config.getMessage("error"));
-                }
-                return true;
-            }
-            return false;
-        }
-        if (command.getName().equalsIgnoreCase("elotop")) {
-            int page = 1;
-            if (args.length > 0) {
-                try {
-                    page = Integer.parseInt(args[0]);
-                } catch (Exception e) {
-                    return false;
-                }
-                if (page < 1) {
-                    return false;
-                }
-            }
-            int amount = Config.getPlayersTop() > eloPlayers.size() ? eloPlayers.size() : Config.getPlayersTop();
-            int perpage = Config.getPlayersPerPage();
-            int pages = amount / perpage;
-            int last = amount % perpage == 0 ? perpage : amount % perpage;
-            int start = perpage * (page - 1);
-            int mypage = page;
-            if (page > pages) {
-                mypage = pages - 1;
-                perpage = last;
-                start = perpage * mypage;
-            }
-            int i = 0, cnt = 0;
-            EloPlayer[] top = new EloPlayer[perpage];
-            Map sorted = new TreeMap(new ValueComparator((eloPlayers)));
-            sorted.putAll(eloPlayers);
-            for (Object ep : sorted.values()) {
-                if (cnt >= start && i < perpage) {
-                    top[i++] = (EloPlayer) ep;
-                }
-                cnt++;
-            }
-            i = start;
-            sender.sendMessage(Config.getMessage("topHeader", amount));
-            for (EloPlayer ep : top) {
-                sender.sendMessage(Config.getMessage("top", ++i, ep.getName(), ep.getEloPoints()));
-            }
-            if (page < pages) {
-                sender.sendMessage(Config.getMessage("topMore", mypage + 1));
-            }
-            return true;
-        }
-        return false;
     }
 
     public EloFile getEloFile() {

@@ -23,6 +23,8 @@
  */
 package pl.chormon.elopvpranking;
 
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import org.bukkit.entity.Player;
 
@@ -35,7 +37,6 @@ public class EloPlayer implements Comparable<EloPlayer> {
     private final UUID uniqueId;
     private final String name;
     private int eloPoints;
-    private int raking;
 
     public EloPlayer(UUID uniqueId) {
         this.uniqueId = uniqueId;
@@ -43,13 +44,11 @@ public class EloPlayer implements Comparable<EloPlayer> {
         if (ep != null) {
             this.name = ep.getName();
             this.eloPoints = ep.getEloPoints();
-            this.raking = ep.getRaking();
             return;
         }
         Player OnlinePlayer = EloPVPRanking.get().getServer().getPlayer(uniqueId);
         this.name = OnlinePlayer != null ? OnlinePlayer.getName() : EloPVPRanking.get().getServer().getOfflinePlayer(uniqueId).getName();
         this.eloPoints = Config.getStartingPoints();
-        this.raking = 0;
     }
 
     public EloPlayer(UUID uniqueId, String name) {
@@ -62,14 +61,12 @@ public class EloPlayer implements Comparable<EloPlayer> {
         this.uniqueId = uniqueId;
         this.name = name;
         this.eloPoints = eloPoints;
-        this.raking = 0;
     }
 
     public EloPlayer(UUID uniqueId, String name, int eloPoints, int raking) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.eloPoints = eloPoints;
-        this.raking = raking;
     }
 
     public void save() {
@@ -96,16 +93,21 @@ public class EloPlayer implements Comparable<EloPlayer> {
         return eloPoints;
     }
 
-    public int getRaking() {
-        return raking;
+    public int getRanking() {
+        EloPVPRanking plugin = EloPVPRanking.get();
+        Map sorted = new TreeMap(new ValueComparator((plugin.eloPlayers)));
+        sorted.putAll(plugin.eloPlayers);       
+        int i = 1;
+        for(Object s : sorted.keySet()) {
+            if(name.equalsIgnoreCase((String) s))
+                break;
+            i++;
+        }
+        return i;
     }
 
     public void setEloPoints(int eloPoints) {
         this.eloPoints = eloPoints;
-    }
-
-    public void setRaking(int raking) {
-        this.raking = raking;
     }
 
     @Override
@@ -119,8 +121,6 @@ public class EloPlayer implements Comparable<EloPlayer> {
         if(obj instanceof EloPlayer) {
             EloPlayer ep = (EloPlayer) obj;
             if(ep.getName() != this.name)
-                return false;
-            if(ep.getRaking()!= this.raking)
                 return false;
             if(ep.getEloPoints()!= this.eloPoints)
                 return false;

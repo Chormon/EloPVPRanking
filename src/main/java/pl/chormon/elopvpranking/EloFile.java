@@ -115,7 +115,7 @@ public class EloFile {
         String section = "players."+player.getUniqueId();
         this.fileConfiguration.set(section+".name", player.getName());
         this.fileConfiguration.set(section+".elopoints", player.getEloPoints());
-        this.fileConfiguration.set(section+".rank", player.getRaking());
+        this.fileConfiguration.set(section+".rank", player.getRanking());
         saveConfig();
     }
     
