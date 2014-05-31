@@ -128,8 +128,19 @@ public class EloPlayer implements Comparable<EloPlayer> {
 
     @Override
     public int compareTo(EloPlayer o) {
-        int res = Integer.compare(o.eloPoints, eloPoints);
-        return res != 0 ? res : name.compareTo(o.name);
+        int ept = Integer.compare(o.eloPoints, eloPoints);
+        if(ept != 0)
+            return ept;
+        int kdr = Float.compare(o.getKDR(), getKDR());
+        if(kdr != 0)
+            return kdr;
+        int k = Integer.compare(o.kills, kills);
+        if(k != 0)
+            return k;
+        int d = Integer.compare(deaths, o.deaths);
+        if(d != 0)
+            return d;
+        return name.compareTo(o.name);
     }
 
     @Override
