@@ -29,7 +29,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import pl.chormon.elopvpranking.EloPVPRanking;
-import pl.chormon.elopvpranking.EloPlayer;
 
 /**
  *
@@ -47,8 +46,6 @@ public class EloReload implements CommandExecutor {
         plugin.getEloFile().reloadConfig();
         plugin.eloPlayers.putAll(plugin.getEloFile().getPlayers());
         plugin.getLogger().log(Level.INFO, "Plugin reloaded!");
-        for(EloPlayer ep : plugin.eloPlayers.values())
-            plugin.getLogger().log(Level.INFO, ep.toString());
         return true;
     }
     

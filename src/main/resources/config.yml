@@ -16,6 +16,7 @@ messages:
   eloKills: "&2Ilosc zabojstw/Ilosc smierci: &f{0}/{1} (&2KDR: &f{2})"
   eloPoints: "&2Punkty: &f{0} &2(&f{1} &2miejsce w rankingu)"
   error: "&4Stalo sie cos zlego i nie mozna wykonac tej komendy. Jesli to sie powtorzy, skontaktuj sie z administracja serwera!"
+  noPlayers: "&4Brak graczy w rankingu!"
   playerNotExist: "&4Gracz {0} nie istnieje!"
   topHeader: "&2-----[&f Top {0} graczy w rankingu Elo &2]-----"
   top: "&7{0}. &2{1} &7- &f{2} pkt."

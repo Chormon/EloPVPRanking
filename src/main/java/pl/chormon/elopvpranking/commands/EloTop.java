@@ -54,12 +54,16 @@ public class EloTop implements CommandExecutor {
             }
         }
         int amount = Config.getPlayersTop() > plugin.eloPlayers.size() ? plugin.eloPlayers.size() : Config.getPlayersTop();
+        if(amount == 0) {
+            sender.sendMessage(Config.getMessage("noPlayers"));
+            return true;
+        }
         int perpage = Config.getPlayersPerPage();
-        int pages = amount / perpage;
+        int pages = amount % perpage == 0 ? amount / perpage : amount / perpage + 1;
         int last = amount % perpage == 0 ? perpage : amount % perpage;
         int start = perpage * (page - 1);
         int mypage = page;
-        if (page > pages) {
+        if (page >= pages) {
             mypage = pages - 1;
             perpage = last;
             start = perpage * mypage;
@@ -69,6 +73,8 @@ public class EloTop implements CommandExecutor {
         Map sorted = new TreeMap(new ValueComparator((plugin.eloPlayers)));
         sorted.putAll(plugin.eloPlayers);
         for (Object ep : sorted.values()) {
+            if(ep == null)
+                continue;
             if (cnt >= start && i < perpage) {
                 top[i++] = (EloPlayer) ep;
             }
