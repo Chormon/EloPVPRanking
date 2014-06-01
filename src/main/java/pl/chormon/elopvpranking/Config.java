@@ -78,13 +78,13 @@ public class Config {
     }
     
     public static int getMaxPoints() {
-        if(EloPVPRanking.get().getConfig().getString("settings.maxPoints") == "inf")
+        if(EloPVPRanking.get().getConfig().getString("settings.maxPoints").equals("inf"))
             return Integer.MAX_VALUE;
         return EloPVPRanking.get().getConfig().getInt("settings.maxPoints");
     }
     
     public static int getMinPoints() {
-        if(EloPVPRanking.get().getConfig().getString("settings.minPoints") == "-inf")
+        if(EloPVPRanking.get().getConfig().getString("settings.minPoints").equals("-inf"))
             return Integer.MIN_VALUE;
         return EloPVPRanking.get().getConfig().getInt("settings.minPoints");
     }

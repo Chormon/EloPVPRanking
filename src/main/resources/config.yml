@@ -4,6 +4,7 @@ settings:
   constantValue: 32
   playersTop: 21
   playersPerPage: 7
+  logPointsChange: true
   # "inf" (nieskończoność) lub dowolna liczba całkowita
   maxPoints: "inf"
   # "-inf" (minus nieskończoność) lub dowolna liczba całkowita
