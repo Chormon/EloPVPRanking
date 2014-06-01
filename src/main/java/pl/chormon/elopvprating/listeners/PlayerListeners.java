@@ -50,9 +50,16 @@ public class PlayerListeners implements Listener {
         if(!(e.getEntity().getKiller() instanceof Player))
             return;
         EloPlayer victim = EloPVPRanking.get().eloPlayers.get(e.getEntity().getName().toLowerCase());
+        if(victim == null) {
+            Player p = e.getEntity();
+            victim = new EloPlayer(p.getUniqueId(), p.getName());
+        }
         EloPlayer killer = EloPVPRanking.get().eloPlayers.get(e.getEntity().getKiller().getName().toLowerCase());
-        if(victim == null || killer == null)
-            return;
+        if(killer == null) {
+            Player p = e.getEntity().getKiller();
+            killer = new EloPlayer(p.getUniqueId(), p.getName());
+        }
+        
         int Rv = victim.getEloPoints();
         int Rk = killer.getEloPoints();
         float Ev = (float) (1/(1+Math.pow(10,(Rk-Rv)/400f)));
