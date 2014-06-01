@@ -64,7 +64,7 @@ public class EloPlayer implements Comparable<EloPlayer> {
     }
 
     public void save() {
-        String lastName = EloPVPRanking.get().getEloFile().getPlayer(uniqueId).name;
+        String lastName = EloPVPRanking.get().getEloFile().getPlayerName(uniqueId);
         EloPVPRanking.get().getEloFile().savePlayer(this);
         if(EloPVPRanking.get().eloPlayers.containsKey(name.toLowerCase())) {
             EloPlayer ep = EloPVPRanking.get().eloPlayers.get(name.toLowerCase());
@@ -74,7 +74,7 @@ public class EloPlayer implements Comparable<EloPlayer> {
             }
             return;
         }
-        if(EloPVPRanking.get().eloPlayers.containsKey(lastName.toLowerCase())) {
+        if(lastName != null && !lastName.isEmpty() && EloPVPRanking.get().eloPlayers.containsKey(lastName.toLowerCase())) {
             EloPVPRanking.get().eloPlayers.remove(lastName.toLowerCase());
             EloPVPRanking.get().eloPlayers.put(name.toLowerCase(), this);
             return;

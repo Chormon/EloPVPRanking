@@ -134,6 +134,13 @@ public class EloFile {
         return new EloPlayer(uniqueId, name, eloPoints, kills, deaths);
     }
     
+    public String getPlayerName(UUID uniqueId) {
+        String path = "players."+uniqueId;
+        if(!this.fileConfiguration.contains(path))
+            return null;
+        return this.fileConfiguration.getString(path + ".name");
+    }
+    
     public TreeMap<String, EloPlayer> getPlayers() {
         TreeMap<String, EloPlayer> players = new TreeMap<>();
         
