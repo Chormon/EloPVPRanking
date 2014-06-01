@@ -21,5 +21,5 @@ messages:
   topHeader: "&2-----[&f Top {0} graczy w rankingu Elo &2]-----"
   top: "&7{0}. &2{1} &7- &f{2} pkt."
   topMore: "&2Wiecej &7- &f/elotop {0}"
-  lostPoints: "Straciles {0} puntkow i masz ich teraz {1}. Jestes na {2} miejscu w rankingu."
-  gainedPoints: "Zdobyles {0} puntkow i masz ich teraz {1}. Jestes na {2} miejscu w rankingu."
+  lostPoints: "&2Straciles &f{0} &2puntkow i masz ich teraz &f{1}&2. Jestes na &f{2} &2miejscu w rankingu."
+  gainedPoints: "&2Zdobyles &f{0} &2puntkow i masz ich teraz &f{1}&2. Jestes na &f{2} &2miejscu w rankingu."

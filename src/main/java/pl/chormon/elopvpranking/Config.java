@@ -44,7 +44,12 @@ public class Config {
     }
 
     public static String getMessage(String path, Object... params) {
-        String message = ChatColor.translateAlternateColorCodes('&', EloPVPRanking.get().getConfig().getString("messages." + path));
+        String message = "";
+        try {
+            message = ChatColor.translateAlternateColorCodes('&', EloPVPRanking.get().getConfig().getString("messages." + path));
+        } catch (Exception e) {
+            return "";
+        }
         if (params != null) {
             return MessageFormat.format(message, params);
         } else {

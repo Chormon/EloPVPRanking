@@ -75,7 +75,7 @@ public class PlayerListeners implements Listener {
         killer.setEloPoints(Rkn);
         killer.addKill();
         killer.save();
-        EloPVPRanking.get().getServer().getPlayer(killer.getUniqueId()).sendMessage(Config.getMessage("geinedPoints", Rv - Rvn, Rvn, EloPVPRanking.get().calculateRanking(killer.getName())));
+        EloPVPRanking.get().getServer().getPlayer(killer.getUniqueId()).sendMessage(Config.getMessage("gainedPoints", Rv - Rvn, Rvn, EloPVPRanking.get().calculateRanking(killer.getName())));
         if(Config.getLogPointsChange())
             EloPVPRanking.get().getLogger().log(Level.INFO, "Player {0} gained {1} points and now has {2}.", new Object[] {killer.getName(), Rk - Rkn, Rkn});
     }
