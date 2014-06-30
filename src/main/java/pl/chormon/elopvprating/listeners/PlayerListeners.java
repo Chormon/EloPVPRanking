@@ -24,6 +24,7 @@
 
 package pl.chormon.elopvprating.listeners;
 
+import java.util.List;
 import java.util.logging.Level;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,6 +50,13 @@ public class PlayerListeners implements Listener {
     public void onDeath(PlayerDeathEvent e) {
         if(!(e.getEntity().getKiller() instanceof Player))
             return;
+        List<String> worlds = Config.getWorlds();
+        
+        String world = e.getEntity().getWorld().getName();
+        
+        if(!worlds.isEmpty() && !worlds.contains(world))
+            return;
+        
         EloPlayer victim = EloPVPRanking.get().eloPlayers.get(e.getEntity().getName().toLowerCase());
         if(victim == null) {
             Player p = e.getEntity();

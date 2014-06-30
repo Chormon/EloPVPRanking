@@ -9,6 +9,8 @@ settings:
   maxPoints: "inf"
   # "-inf" (minus nieskończoność) lub dowolna liczba całkowita
   minPoints: 0
+  # światy, w których liczone są śmierci ([] - wszystkie)
+  worlds: []
 
 # wiadomosci
 messages:

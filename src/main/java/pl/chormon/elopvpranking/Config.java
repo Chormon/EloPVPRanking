@@ -25,6 +25,7 @@
 package pl.chormon.elopvpranking;
 
 import java.text.MessageFormat;
+import java.util.List;
 import org.bukkit.ChatColor;
 
 /**
@@ -87,5 +88,9 @@ public class Config {
         if(EloPVPRanking.get().getConfig().getString("settings.minPoints").equals("-inf"))
             return Integer.MIN_VALUE;
         return EloPVPRanking.get().getConfig().getInt("settings.minPoints");
+    }
+    
+    public static List<String> getWorlds() {
+        return EloPVPRanking.get().getConfig().getStringList("settings.worlds");
     }
 }
