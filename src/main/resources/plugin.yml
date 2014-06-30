@@ -16,6 +16,10 @@ commands:
     description: Przeladowuje plugin
     permissions: elopvpranking.eloreload
     usage: /<command>
+  eloinfo:
+    description: Informacje o pluginie
+    permission: elopvpranking.eloinfo
+    usage: /<command>
 permissions:
   elopvpranking.*:
     description: Pozwala na uzycie wszystkich komend pluginu EloPVPRating
@@ -36,5 +40,8 @@ permissions:
     default: true
   elopvpranking.eloreload:
     description: Pozwala na przeladowanie pluginu
+    default: op
+  elopvpranking.eloinfo:
+    description: Pozwala na wyswietlenie informacji o pluginie
     default: op
       

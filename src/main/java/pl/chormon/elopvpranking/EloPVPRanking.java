@@ -38,6 +38,8 @@ import pl.chormon.elopvprating.listeners.PlayerListeners;
  */
 public class EloPVPRanking extends JavaPlugin {
 
+    private static final String version = "1.0.1";
+
     private static EloPVPRanking plugin;
     private EloFile eloFile;
     public TreeMap<String, EloPlayer> eloPlayers;
@@ -56,6 +58,7 @@ public class EloPVPRanking extends JavaPlugin {
         getCommand("Elo").setExecutor(new Elo());
         getCommand("Elotop").setExecutor(new EloTop());
         getCommand("EloReload").setExecutor(new EloReload());
+        getCommand("EloInfo").setExecutor(new EloInfo());
         getLogger().log(Level.INFO, "{0} {1} enabled!", new Object[]{pdf.getName(), pdf.getVersion()});
     }
 
@@ -72,11 +75,12 @@ public class EloPVPRanking extends JavaPlugin {
 
     public int calculateRanking(String name) {
         Map sorted = new TreeMap(new ValueComparator((eloPlayers)));
-        sorted.putAll(eloPlayers);       
+        sorted.putAll(eloPlayers);
         int i = 1;
-        for(Object s : sorted.keySet()) {
-            if(name.equalsIgnoreCase((String) s))
+        for (Object s : sorted.keySet()) {
+            if (name.equalsIgnoreCase((String) s)) {
                 break;
+            }
             i++;
         }
         return i;
@@ -84,6 +88,10 @@ public class EloPVPRanking extends JavaPlugin {
 
     public static EloPVPRanking get() {
         return plugin;
+    }
+    
+    public static String getVersion() {
+        return version;
     }
 
 }
