@@ -40,12 +40,11 @@ public class EloInfo implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         String info = "";        
         StringBuilder sb = new StringBuilder();
-        sb.append("&2-----[&f EloPVPRanking &2]-----\n");
         sb.append("&2Wersja: &f");
         sb.append(EloPVPRanking.getVersion());
-        sb.append("\n");
-        sb.append("&2Autor: &fChormon");
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2-----[&f EloPVPRanking &2]-----"));
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', sb.toString()));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Autor: &fChormon"));
         return true;
     }
     
