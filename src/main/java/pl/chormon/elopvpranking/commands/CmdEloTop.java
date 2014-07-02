@@ -33,7 +33,6 @@ import pl.chormon.elopvpranking.EloPVPRanking;
 import pl.chormon.elopvpranking.EloPlayer;
 import pl.chormon.elopvpranking.ValueComparator;
 import pl.chormon.utils.MsgUtils;
-import pl.chormon.utils.MsgVar;
 
 /**
  *
@@ -84,14 +83,14 @@ public class CmdEloTop implements CommandExecutor {
             cnt++;
         }
         i = start;
-        MsgUtils.msg(sender, Config.getMessage("topHeader"), new MsgVar("{amount}", amount));
+        MsgUtils.msg(sender, Config.getMessage("topHeader"), "{amount}", amount);
 //        sender.sendMessage(Config.getMessage("topHeader", amount));
         for (EloPlayer ep : top) {
-            MsgUtils.msg(sender, Config.getMessage("top"), new MsgVar("{lp}", ++i), new MsgVar("{player}", ep.getName()), new MsgVar("{points}", ep.getEloPoints()));
+            MsgUtils.msg(sender, Config.getMessage("top"), "{lp}", ++i, "{player}", ep.getName(), "{points}", ep.getEloPoints());
 //            sender.sendMessage(Config.getMessage("top", ++i, ep.getName(), ep.getEloPoints()));
         }
         if (page < pages) {
-            MsgUtils.msg(sender, Config.getMessage("topMore"), new MsgVar("{page}", mypage + 1));
+            MsgUtils.msg(sender, Config.getMessage("topMore"), "{page}", mypage + 1);
 //            sender.sendMessage(Config.getMessage("topMore", mypage + 1));
         }
         return true;

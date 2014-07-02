@@ -31,7 +31,6 @@ import pl.chormon.elopvpranking.Config;
 import pl.chormon.elopvpranking.EloPVPRanking;
 import pl.chormon.elopvpranking.EloPlayer;
 import pl.chormon.utils.MsgUtils;
-import pl.chormon.utils.MsgVar;
 
 /**
  *
@@ -50,7 +49,7 @@ public class CmdElo implements CommandExecutor {
             if (sender.hasPermission("elopvpranking.elo.others") || !(sender instanceof Player)) {
                 EloPlayer ep = plugin.eloPlayers.get(name);
                 if (ep == null) {
-                    MsgUtils.msg(sender, Config.getMessage("playerNotExist"), new MsgVar("{player}", name));
+                    MsgUtils.msg(sender, Config.getMessage("playerNotExist"), "{player}", name);
 //                    sender.sendMessage(Config.getMessage("playerNotExist", name));
                     return true;
                 }
@@ -93,10 +92,10 @@ public class CmdElo implements CommandExecutor {
         if (self) {
             MsgUtils.msg(sender, Config.getMessage("eloHeader"));
         } else {
-            MsgUtils.msg(sender, Config.getMessage("eloHeaderOther"), new MsgVar("{player}", ep.getName()));
+            MsgUtils.msg(sender, Config.getMessage("eloHeaderOther"), "{player}", ep.getName());
         }
-        MsgUtils.msg(sender, Config.getMessage("eloKills"), new MsgVar("{kills}", ep.getKills()), new MsgVar("{deaths}", ep.getDeaths()), new MsgVar("{kdr}", ep.getKDR()));
-        MsgUtils.msg(sender, Config.getMessage("eloPoints"), new MsgVar("{points}", ep.getEloPoints()), new MsgVar("{ranking}", ep.getRanking()));
+        MsgUtils.msg(sender, Config.getMessage("eloKills"), "{kills}", ep.getKills(), "{deaths}", ep.getDeaths(), "{kdr}", ep.getKDR());
+        MsgUtils.msg(sender, Config.getMessage("eloPoints"), "{points}", ep.getEloPoints(), "{ranking}", ep.getRanking());
     }
 
 }

@@ -43,49 +43,48 @@ public class MsgUtils {
 //    private static void log(String msg) {
 //        log(msg, (MsgVar) null);
 //    }
-    private static void log(String msg, MsgVar... vars) {
+    private static void log(String msg, Object... vars) {
         msg(MsgUtils.console, prefix + msg, vars);
     }
 
     public static void info(String msg) {
-        MsgUtils.log("&a[INFO]&r" + msg, (MsgVar) null);
+        MsgUtils.log("&a[INFO]&r" + msg, (Object) null);
     }
 
-    public static void info(String msg, MsgVar... vars) {
+    public static void info(String msg, Object... vars) {
         MsgUtils.log("&a[INFO]&r" + msg, vars);
     }
 
     public static void warning(String msg) {
-        MsgUtils.log("&c[WARNING]&r" + msg, (MsgVar) null);
+        MsgUtils.log("&c[WARNING]&r" + msg, (Object) null);
     }
 
-    public static void warning(String msg, MsgVar... vars) {
+    public static void warning(String msg, Object... vars) {
         MsgUtils.log("&c[WARNING]&r" + msg, vars);
     }
 
     public static void error(String msg) {
-        MsgUtils.log("&c[ERROR]&r" + msg, (MsgVar) null);
+        MsgUtils.log("&c[ERROR]&r" + msg, (Object) null);
     }
 
-    public static void error(String msg, MsgVar... vars) {
+    public static void error(String msg, Object... vars) {
         MsgUtils.log("&c[ERROR]&r" + msg, vars);
     }
 
     public static void msg(CommandSender cs, String msg) {
-        msg(cs, msg, (MsgVar) null);
+        msg(cs, msg, (Object) null);
     }
 
-    public static void msg(CommandSender cs, String msg, MsgVar... vars) {
+    public static void msg(CommandSender cs, String msg, Object... vars) {
         cs.sendMessage(fixMsg(msg, vars));
     }
 
-    private static String fixMsg(String msg, MsgVar... vars) {
+    private static String fixMsg(String msg, Object... vars) {
         if (vars != null) {
-            for (MsgVar var : vars) {
-                if (var == null) {
-                    continue;
-                }
-                msg = msg.replace(var.key, var.value);
+            for(int i = 0; i < vars.length; i++) {
+                if(vars[i] == null)
+                    break;
+                msg = msg.replace(vars[i].toString(), vars[++i].toString());
             }
         }
         return ChatColor.translateAlternateColorCodes('&', msg);
