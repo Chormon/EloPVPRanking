@@ -25,7 +25,6 @@
 package pl.chormon.elopvprating.listeners;
 
 import java.util.List;
-import java.util.logging.Level;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,6 +34,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import pl.chormon.elopvpranking.Config;
 import pl.chormon.elopvpranking.EloPVPRanking;
 import pl.chormon.elopvpranking.EloPlayer;
+import pl.chormon.utils.MsgUtils;
+import pl.chormon.utils.MsgVar;
 
 /**
  *
@@ -84,15 +85,19 @@ public class PlayerListeners implements Listener {
         victim.setEloPoints(Rvn);
         victim.addDeath();
         victim.save();
-        EloPVPRanking.get().getServer().getPlayer(victim.getUniqueId()).sendMessage(Config.getMessage("lostPoints", Rv - Rvn, Rvn, EloPVPRanking.get().calculateRanking(victim.getName())));
+        MsgUtils.msg(EloPVPRanking.get().getServer().getPlayer(victim.getUniqueId()), Config.getMessage("lostPoints"), new MsgVar("{lost}", Rv - Rvn), new MsgVar("{points}", Rvn), new MsgVar("{ranking}", EloPVPRanking.get().calculateRanking(victim.getName())));
+//        EloPVPRanking.get().getServer().getPlayer(victim.getUniqueId()).sendMessage(Config.getMessage("lostPoints", Rv - Rvn, Rvn, EloPVPRanking.get().calculateRanking(victim.getName())));
         if(Config.getLogPointsChange())
-            EloPVPRanking.get().getLogger().log(Level.INFO, "Player {0} lost {1} points and now has {2}.", new Object[] {victim.getName(), Rv - Rvn, Rvn});
+            MsgUtils.info("Player &f{player} &rlost &f{lost} &rpoints and now has &f{points}&r.", new MsgVar("{player}", victim.getName()), new MsgVar("{lost}", Rv - Rvn), new MsgVar("{points}", Rvn));
+//            EloPVPRanking.get().getLogger().log(Level.INFO, "Player {0} lost {1} points and now has {2}.", new Object[] {victim.getName(), Rv - Rvn, Rvn});
         killer.setEloPoints(Rkn);
         killer.addKill();
         killer.save();
-        EloPVPRanking.get().getServer().getPlayer(killer.getUniqueId()).sendMessage(Config.getMessage("gainedPoints", Rkn - Rk, Rkn, EloPVPRanking.get().calculateRanking(killer.getName())));
+        MsgUtils.msg(EloPVPRanking.get().getServer().getPlayer(killer.getUniqueId()), Config.getMessage("gainedPoints"), new MsgVar("{gained}", Rkn - Rk), new MsgVar("{points}", Rkn), new MsgVar("{ranking}", EloPVPRanking.get().calculateRanking(killer.getName())));
+//        EloPVPRanking.get().getServer().getPlayer(killer.getUniqueId()).sendMessage(Config.getMessage("gainedPoints", Rkn - Rk, Rkn, EloPVPRanking.get().calculateRanking(killer.getName())));
         if(Config.getLogPointsChange())
-            EloPVPRanking.get().getLogger().log(Level.INFO, "Player {0} gained {1} points and now has {2}.", new Object[] {killer.getName(), Rkn - Rk, Rkn});
+            MsgUtils.info("Player &f{player}&r gained &f{gained} &rpoints and now has &f{points}&r.", new MsgVar("{player}", killer.getName()), new MsgVar("{gained}", Rkn - Rk), new MsgVar("{points}", Rkn));
+//            EloPVPRanking.get().getLogger().log(Level.INFO, "Player {0} gained {1} points and now has {2}.", new Object[] {killer.getName(), Rkn - Rk, Rkn});
     }
     
     @EventHandler(priority = EventPriority.NORMAL)
