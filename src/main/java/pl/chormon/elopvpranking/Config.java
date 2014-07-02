@@ -41,9 +41,10 @@ public class Config {
     
     public static String getMessage(String path)
     {
-        return getMessage(path, (Object) null);
+        return EloPVPRanking.get().getConfig().getString("messages." + path);
     }
-
+    
+    @Deprecated
     public static String getMessage(String path, Object... params) {
         String message = "";
         try {
