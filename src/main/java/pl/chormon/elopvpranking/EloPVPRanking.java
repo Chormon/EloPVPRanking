@@ -26,11 +26,13 @@ package pl.chormon.elopvpranking;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.chormon.elopvpranking.commands.*;
 import pl.chormon.elopvprating.listeners.PlayerListeners;
+import pl.chormon.utils.MsgUtils;
 
 /**
  *
@@ -38,7 +40,7 @@ import pl.chormon.elopvprating.listeners.PlayerListeners;
  */
 public class EloPVPRanking extends JavaPlugin {
 
-    private static final String version = "1.0.1";
+    private static final String version = "1.0.2";
 
     private static EloPVPRanking plugin;
     private EloFile eloFile;
@@ -55,10 +57,11 @@ public class EloPVPRanking extends JavaPlugin {
         if (eloPlayers == null) {
             eloPlayers = new TreeMap<>();
         }
-        getCommand("Elo").setExecutor(new Elo());
-        getCommand("Elotop").setExecutor(new EloTop());
-        getCommand("EloReload").setExecutor(new EloReload());
-        getCommand("EloInfo").setExecutor(new EloInfo());
+        MsgUtils.setConsole(Bukkit.getConsoleSender());
+        getCommand("Elo").setExecutor(new CmdElo());
+        getCommand("Elotop").setExecutor(new CmdEloTop());
+        getCommand("EloReload").setExecutor(new CmdEloReload());
+        getCommand("EloInfo").setExecutor(new CmdEloInfo());
         getLogger().log(Level.INFO, "{0} {1} enabled!", new Object[]{pdf.getName(), pdf.getVersion()});
     }
 
