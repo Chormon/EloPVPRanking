@@ -89,21 +89,23 @@ public class CmdElo implements CommandExecutor {
         StringBuilder sb1 = new StringBuilder();
         List<String> lastKills = ep.getLastKills();
         if (lastKills.isEmpty()) {
-            sb1.append("brak");
+            sb1.append(Config.getMessage("none"));
         } else {
             for (int i = Config.getKillsHistory() > lastKills.size() ? lastKills.size() - 1 : Config.getKillsHistory() - 1; i >= 0; i--) {
                 sb1.append(lastKills.get(i));
-                sb1.append(" ");
+                if(i-1 > 0)
+                    sb1.append(Config.getMessage("separator"));
             }
         }
         StringBuilder sb2 = new StringBuilder();
         List<String> lastDeaths = ep.getLastDeaths();
         if (lastDeaths.isEmpty()) {
-            sb2.append("brak");
+            sb2.append(Config.getMessage("none"));
         } else {
             for (int i = Config.getDeathsHistory() > lastDeaths.size() ? lastDeaths.size() - 1 : Config.getDeathsHistory() - 1; i >= 0; i--) {
                 sb2.append(lastDeaths.get(i));
-                sb2.append(" ");
+                if(i-1 > 0)
+                    sb2.append(Config.getMessage("separator"));
             }
         }
         MsgUtils.msg(sender, Config.getMessage("lastKills"), "{players}", sb1.toString());
