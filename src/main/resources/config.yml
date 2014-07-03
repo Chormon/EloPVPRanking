@@ -24,6 +24,7 @@ messages:
   eloPoints: "&2Punkty: &f{points} &2(&f{ranking} &2miejsce w rankingu)"
   lastKills: "&2Ostatnie zabojstwa: &f{players}"
   lastDeaths: "&2Ostatnie smierci: &f{players}"
+  separator: "&a, &f"
   error: "&4Stalo sie cos zlego i nie mozna wykonac tej komendy. Jesli to sie powtorzy, skontaktuj sie z administracja serwera!"
   noPlayers: "&4Brak graczy w rankingu!"
   playerNotExist: "&4Gracz {player} nie istnieje!"
@@ -32,3 +33,4 @@ messages:
   topMore: "&2Wiecej &7- &f/elotop {page}"
   lostPoints: "&2Straciles &f{lost} &2puntkow i masz ich teraz &f{points}&2. Jestes na &f{ranking} &2miejscu w rankingu."
   gainedPoints: "&2Zdobyles &f{gained} &2puntkow i masz ich teraz &f{points}&2. Jestes na &f{ranking} &2miejscu w rankingu."
+  none: "brak"
