@@ -25,7 +25,6 @@ package pl.chormon.elopvpranking;
 
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -53,23 +52,23 @@ public class EloPVPRanking extends JavaPlugin {
         Config.initConfig();
         eloFile = new EloFile("elopoints.yml");
         new PlayerListeners();
+        MsgUtils.setConsole(Bukkit.getConsoleSender());
         eloPlayers = eloFile.getPlayers();
         if (eloPlayers == null) {
             eloPlayers = new TreeMap<>();
         }
-        MsgUtils.setConsole(Bukkit.getConsoleSender());
         getCommand("Elo").setExecutor(new CmdElo());
         getCommand("Elotop").setExecutor(new CmdEloTop());
         getCommand("EloReload").setExecutor(new CmdEloReload());
         getCommand("EloInfo").setExecutor(new CmdEloInfo());
-        getLogger().log(Level.INFO, "{0} {1} enabled!", new Object[]{pdf.getName(), pdf.getVersion()});
+        MsgUtils.info("{name} {version} enabled!", "{name}", pdf.getName(), "{version}", pdf.getVersion());
     }
 
     @Override
     public void onDisable() {
         PluginDescriptionFile pdf = this.getDescription();
         HandlerList.unregisterAll(this);
-        getLogger().log(Level.INFO, "{0} {1} disabled!", new Object[]{pdf.getName(), pdf.getVersion()});
+        MsgUtils.info("{name} {version} disabled!", "{name}", pdf.getName(), "{version}", pdf.getVersion());
     }
 
     public EloFile getEloFile() {
@@ -92,7 +91,7 @@ public class EloPVPRanking extends JavaPlugin {
     public static EloPVPRanking get() {
         return plugin;
     }
-    
+
     public static String getVersion() {
         return version;
     }

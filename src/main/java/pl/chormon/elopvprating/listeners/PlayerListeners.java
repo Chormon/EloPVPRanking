@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.chormon.elopvprating.listeners;
 
 import java.util.List;
@@ -45,60 +44,62 @@ public class PlayerListeners implements Listener {
     public PlayerListeners() {
         EloPVPRanking.get().getServer().getPluginManager().registerEvents(this, EloPVPRanking.get());
     }
-    
+
     @EventHandler(priority = EventPriority.NORMAL)
     public void onDeath(PlayerDeathEvent e) {
-        if(!(e.getEntity().getKiller() instanceof Player))
+        if (!(e.getEntity().getKiller() instanceof Player)) {
             return;
+        }
         List<String> worlds = Config.getWorlds();
-        
+
         String world = e.getEntity().getWorld().getName();
-        
-        if(!worlds.isEmpty() && !worlds.contains(world))
+
+        if (!worlds.isEmpty() && !worlds.contains(world)) {
             return;
-        
+        }
+
         EloPlayer victim = EloPVPRanking.get().eloPlayers.get(e.getEntity().getName().toLowerCase());
-        if(victim == null) {
+        if (victim == null) {
             Player p = e.getEntity();
             victim = new EloPlayer(p.getUniqueId(), p.getName());
         }
         EloPlayer killer = EloPVPRanking.get().eloPlayers.get(e.getEntity().getKiller().getName().toLowerCase());
-        if(killer == null) {
+        if (killer == null) {
             Player p = e.getEntity().getKiller();
             killer = new EloPlayer(p.getUniqueId(), p.getName());
         }
-        
+
         int Rv = victim.getEloPoints();
         int Rk = killer.getEloPoints();
-        float Ev = (float) (1/(1+Math.pow(10,(Rk-Rv)/400f)));
-        float Ek = (float) (1/(1+Math.pow(10,(Rv-Rk)/400f)));
+        float Ev = (float) (1 / (1 + Math.pow(10, (Rk - Rv) / 400f)));
+        float Ek = (float) (1 / (1 + Math.pow(10, (Rv - Rk) / 400f)));
         int C = Config.getConstantValue();
         int Rvn = Math.max(Math.round(Rv + C * (-Ev)), Integer.MIN_VALUE);
-        int Rkn = Math.min(Math.round(Rk + C * (1-Ek)), Integer.MAX_VALUE);
-        
-        if(Rvn < Config.getMinPoints())
+        int Rkn = Math.min(Math.round(Rk + C * (1 - Ek)), Integer.MAX_VALUE);
+
+        if (Rvn < Config.getMinPoints()) {
             Rvn = Config.getMinPoints();
-        if(Rkn > Config.getMaxPoints())
+        }
+        if (Rkn > Config.getMaxPoints()) {
             Rkn = Config.getMaxPoints();
-        
+        }
+
         victim.setEloPoints(Rvn);
-        victim.addDeath();
+        victim.addDeath(killer);
         victim.save();
         MsgUtils.msg(EloPVPRanking.get().getServer().getPlayer(victim.getUniqueId()), Config.getMessage("lostPoints"), "{lost}", Rv - Rvn, "{points}", Rvn, "{ranking}", EloPVPRanking.get().calculateRanking(victim.getName()));
-//        EloPVPRanking.get().getServer().getPlayer(victim.getUniqueId()).sendMessage(Config.getMessage("lostPoints", Rv - Rvn, Rvn, EloPVPRanking.get().calculateRanking(victim.getName())));
-        if(Config.getLogPointsChange())
+        if (Config.getLogPointsChange()) {
             MsgUtils.info("Player &f{player} &rlost &f{lost} &rpoints and now has &f{points}&r.", "{player}", victim.getName(), "{lost}", Rv - Rvn, "{points}", Rvn);
-//            EloPVPRanking.get().getLogger().log(Level.INFO, "Player {0} lost {1} points and now has {2}.", new Object[] {victim.getName(), Rv - Rvn, Rvn});
+        }
         killer.setEloPoints(Rkn);
-        killer.addKill();
+        killer.addKill(victim);
         killer.save();
         MsgUtils.msg(EloPVPRanking.get().getServer().getPlayer(killer.getUniqueId()), Config.getMessage("gainedPoints"), "{gained}", Rkn - Rk, "{points}", Rkn, "{ranking}", EloPVPRanking.get().calculateRanking(killer.getName()));
-//        EloPVPRanking.get().getServer().getPlayer(killer.getUniqueId()).sendMessage(Config.getMessage("gainedPoints", Rkn - Rk, Rkn, EloPVPRanking.get().calculateRanking(killer.getName())));
-        if(Config.getLogPointsChange())
+        if (Config.getLogPointsChange()) {
             MsgUtils.info("Player &f{player}&r gained &f{gained} &rpoints and now has &f{points}&r.", "{player}", killer.getName(), "{gained}", Rkn - Rk, "{points}", Rkn);
-//            EloPVPRanking.get().getLogger().log(Level.INFO, "Player {0} gained {1} points and now has {2}.", new Object[] {killer.getName(), Rkn - Rk, Rkn});
+        }
     }
-    
+
     @EventHandler(priority = EventPriority.NORMAL)
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();

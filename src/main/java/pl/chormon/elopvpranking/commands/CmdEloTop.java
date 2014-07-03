@@ -55,9 +55,8 @@ public class CmdEloTop implements CommandExecutor {
             }
         }
         int amount = Config.getPlayersTop() > plugin.eloPlayers.size() ? plugin.eloPlayers.size() : Config.getPlayersTop();
-        if(amount == 0) {
+        if (amount == 0) {
             MsgUtils.msg(sender, Config.getMessage("noPlayers"));
-//            sender.sendMessage(Config.getMessage("noPlayers"));
             return true;
         }
         int perpage = Config.getPlayersPerPage();
@@ -75,8 +74,9 @@ public class CmdEloTop implements CommandExecutor {
         Map sorted = new TreeMap(new ValueComparator((plugin.eloPlayers)));
         sorted.putAll(plugin.eloPlayers);
         for (Object ep : sorted.values()) {
-            if(ep == null)
+            if (ep == null) {
                 continue;
+            }
             if (cnt >= start && i < perpage) {
                 top[i++] = (EloPlayer) ep;
             }
@@ -84,14 +84,11 @@ public class CmdEloTop implements CommandExecutor {
         }
         i = start;
         MsgUtils.msg(sender, Config.getMessage("topHeader"), "{amount}", amount);
-//        sender.sendMessage(Config.getMessage("topHeader", amount));
         for (EloPlayer ep : top) {
             MsgUtils.msg(sender, Config.getMessage("top"), "{lp}", ++i, "{player}", ep.getName(), "{points}", ep.getEloPoints());
-//            sender.sendMessage(Config.getMessage("top", ++i, ep.getName(), ep.getEloPoints()));
         }
         if (page < pages) {
             MsgUtils.msg(sender, Config.getMessage("topMore"), "{page}", mypage + 1);
-//            sender.sendMessage(Config.getMessage("topMore", mypage + 1));
         }
         return true;
     }

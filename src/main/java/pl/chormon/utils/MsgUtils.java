@@ -39,10 +39,7 @@ public class MsgUtils {
     public static void setConsole(ConsoleCommandSender console) {
         MsgUtils.console = console;
     }
-
-//    private static void log(String msg) {
-//        log(msg, (MsgVar) null);
-//    }
+    
     private static void log(String msg, Object... vars) {
         msg(MsgUtils.console, prefix + msg, vars);
     }
@@ -81,9 +78,10 @@ public class MsgUtils {
 
     private static String fixMsg(String msg, Object... vars) {
         if (vars != null) {
-            for(int i = 0; i < vars.length; i++) {
-                if(vars[i] == null)
+            for (int i = 0; i < vars.length; i++) {
+                if (vars[i] == null) {
                     break;
+                }
                 msg = msg.replace(vars[i].toString(), vars[++i].toString());
             }
         }

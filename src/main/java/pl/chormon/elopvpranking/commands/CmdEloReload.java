@@ -50,7 +50,6 @@ public class CmdEloReload implements CommandExecutor {
             MsgUtils.msg(sender, "&2Plugin reloaded!");
         else
             MsgUtils.info("Plugin reloaded!");
-//        plugin.getLogger().log(Level.INFO, "Plugin reloaded!");
         return true;
     }
     

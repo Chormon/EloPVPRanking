@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.chormon.elopvpranking;
 
 import java.text.MessageFormat;
@@ -38,12 +37,11 @@ public class Config {
         EloPVPRanking.get().reloadConfig();
         EloPVPRanking.get().saveDefaultConfig();
     }
-    
-    public static String getMessage(String path)
-    {
+
+    public static String getMessage(String path) {
         return EloPVPRanking.get().getConfig().getString("messages." + path);
     }
-    
+
     @Deprecated
     public static String getMessage(String path, Object... params) {
         String message = "";
@@ -58,40 +56,50 @@ public class Config {
             return message;
         }
     }
-    
+
     public static int getStartingPoints() {
         return EloPVPRanking.get().getConfig().getInt("settings.startingPoints");
     }
-    
+
     public static int getConstantValue() {
         return EloPVPRanking.get().getConfig().getInt("settings.constantValue");
-    }    
-    
+    }
+
     public static int getPlayersTop() {
         return EloPVPRanking.get().getConfig().getInt("settings.playersTop");
     }
-    
+
     public static int getPlayersPerPage() {
         return EloPVPRanking.get().getConfig().getInt("settings.playersPerPage");
     }
-    
+
     public static boolean getLogPointsChange() {
         return EloPVPRanking.get().getConfig().getBoolean("settings.logPointsChange");
     }
-    
+
     public static int getMaxPoints() {
-        if(EloPVPRanking.get().getConfig().getString("settings.maxPoints").equals("inf"))
+        if (EloPVPRanking.get().getConfig().getString("settings.maxPoints").equals("inf")) {
             return Integer.MAX_VALUE;
+        }
         return EloPVPRanking.get().getConfig().getInt("settings.maxPoints");
     }
-    
+
     public static int getMinPoints() {
-        if(EloPVPRanking.get().getConfig().getString("settings.minPoints").equals("-inf"))
+        if (EloPVPRanking.get().getConfig().getString("settings.minPoints").equals("-inf")) {
             return Integer.MIN_VALUE;
+        }
         return EloPVPRanking.get().getConfig().getInt("settings.minPoints");
     }
-    
+
     public static List<String> getWorlds() {
         return EloPVPRanking.get().getConfig().getStringList("settings.worlds");
+    }
+
+    public static int getKillsHistory() {
+        return EloPVPRanking.get().getConfig().getInt("settings.killsHistory");
+    }
+
+    public static int getDeathsHistory() {
+        return EloPVPRanking.get().getConfig().getInt("settings.deathsHistory");
     }
 }

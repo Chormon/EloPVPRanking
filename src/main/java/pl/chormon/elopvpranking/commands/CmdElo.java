@@ -23,6 +23,7 @@
  */
 package pl.chormon.elopvpranking.commands;
 
+import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -55,33 +56,22 @@ public class CmdElo implements CommandExecutor {
                 }
                 if (sender instanceof Player) {
                     Player p = (Player) sender;
-                    if (ep.getUniqueId() == p.getUniqueId()) {
+                    if (ep.getUniqueId().equals(p.getUniqueId())) {
                         displayElo(sender, true, ep);
                         return true;
                     }
                 }
                 displayElo(sender, false, ep);
-//                MsgUtils.msg(sender, Config.getMessage("eloHeaderOther"), new MsgVar("{player}", ep.getName()));
-//                MsgUtils.msg(sender, Config.getMessage("eloKills"), new MsgVar("{kills}", ep.getKills()), new MsgVar("{deaths}", ep.getDeaths()), new MsgVar("{kdr}", ep.getKDR()));
-//                MsgUtils.msg(sender, Config.getMessage("eloPoints"), new MsgVar("{points}", ep.getEloPoints()), new MsgVar("{ranking}", ep.getRanking()));
-//                sender.sendMessage(Config.getMessage("eloHeaderOther", ep.getName()));
-//                sender.sendMessage(Config.getMessage("eloKills", ep.getKills(), ep.getDeaths(), ep.getKDR()));
-//                sender.sendMessage(Config.getMessage("eloPoints", ep.getEloPoints(), ep.getRanking()));
                 return true;
+            } else {
+                MsgUtils.msg(sender, "&4Nie masz do tego uprawnień!");
             }
         } else if (sender instanceof Player) {
             EloPlayer ep = plugin.eloPlayers.get(((Player) sender).getName().toLowerCase());
             if (ep != null) {
                 displayElo(sender, true, ep);
-//                MsgUtils.msg(sender, Config.getMessage("eloHeader"));
-//                MsgUtils.msg(sender, Config.getMessage("eloKills"), new MsgVar("{kills}", ep.getKills()), new MsgVar("{deaths}", ep.getDeaths()), new MsgVar("{kdr}", ep.getKDR()));
-//                MsgUtils.msg(sender, Config.getMessage("eloPoints"), new MsgVar("{points}", ep.getEloPoints()), new MsgVar("{ranking}", ep.getRanking()));
-//                sender.sendMessage(Config.getMessage("eloHeader"));
-//                sender.sendMessage(Config.getMessage("eloKills", ep.getKills(), ep.getDeaths(), ep.getKDR()));
-//                sender.sendMessage(Config.getMessage("eloPoints", ep.getEloPoints(), ep.getRanking()));
             } else {
                 MsgUtils.msg(sender, Config.getMessage("error"));
-//                sender.sendMessage(Config.getMessage("error"));
             }
             return true;
         }
@@ -96,6 +86,28 @@ public class CmdElo implements CommandExecutor {
         }
         MsgUtils.msg(sender, Config.getMessage("eloKills"), "{kills}", ep.getKills(), "{deaths}", ep.getDeaths(), "{kdr}", ep.getKDR());
         MsgUtils.msg(sender, Config.getMessage("eloPoints"), "{points}", ep.getEloPoints(), "{ranking}", ep.getRanking());
+        StringBuilder sb1 = new StringBuilder();
+        List<String> lastKills = ep.getLastKills();
+        if (lastKills.isEmpty()) {
+            sb1.append("brak");
+        } else {
+            for (int i = Config.getKillsHistory() > lastKills.size() ? lastKills.size() - 1 : Config.getKillsHistory() - 1; i >= 0; i--) {
+                sb1.append(lastKills.get(i));
+                sb1.append(" ");
+            }
+        }
+        StringBuilder sb2 = new StringBuilder();
+        List<String> lastDeaths = ep.getLastDeaths();
+        if (lastDeaths.isEmpty()) {
+            sb2.append("brak");
+        } else {
+            for (int i = Config.getDeathsHistory() > lastDeaths.size() ? lastDeaths.size() - 1 : Config.getDeathsHistory() - 1; i >= 0; i--) {
+                sb2.append(lastDeaths.get(i));
+                sb2.append(" ");
+            }
+        }
+        MsgUtils.msg(sender, Config.getMessage("lastKills"), "{players}", sb1.toString());
+        MsgUtils.msg(sender, Config.getMessage("lastDeaths"), "{players}", sb2.toString());
     }
 
 }

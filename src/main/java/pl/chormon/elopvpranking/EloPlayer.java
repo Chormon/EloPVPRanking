@@ -23,6 +23,8 @@
  */
 package pl.chormon.elopvpranking;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -38,6 +40,8 @@ public class EloPlayer implements Comparable<EloPlayer> {
     private int eloPoints;
     private int kills;
     private int deaths;
+    private List<String> lastKills;
+    private List<String> lastDeaths;
 
     public EloPlayer(UUID uniqueId, String name) {
         this.uniqueId = uniqueId;
@@ -47,12 +51,16 @@ public class EloPlayer implements Comparable<EloPlayer> {
             this.eloPoints = ep.getEloPoints();
             this.kills = ep.getKills();
             this.deaths = ep.getDeaths();
+            this.lastKills = ep.getLastKills();
+            this.lastDeaths = ep.getLastDeaths();
             return;
         }
         this.name = name;
         this.eloPoints = Config.getStartingPoints();
         this.kills = 0;
         this.deaths = 0;
+        this.lastKills = new ArrayList<>();
+        this.lastDeaths = new ArrayList<>();
     }
 
     public EloPlayer(UUID uniqueId, String name, int eloPoints, int kills, int deaths) {
@@ -61,6 +69,18 @@ public class EloPlayer implements Comparable<EloPlayer> {
         this.eloPoints = eloPoints;
         this.kills = kills;
         this.deaths = deaths;
+        this.lastKills = new ArrayList<>();
+        this.lastDeaths = new ArrayList<>();
+    }
+
+    public EloPlayer(UUID uniqueId, String name, int eloPoints, int kills, int deaths, List<String> lastKills, List<String> lastDeaths) {
+        this.uniqueId = uniqueId;
+        this.name = name;
+        this.eloPoints = eloPoints;
+        this.kills = kills;
+        this.deaths = deaths;
+        this.lastKills = lastKills;
+        this.lastDeaths = lastDeaths;
     }
 
     public void save() {
@@ -106,11 +126,19 @@ public class EloPlayer implements Comparable<EloPlayer> {
         return deaths;
     }
     
-    public void addKill() {
+    public void addKill(EloPlayer ep) {
+        if(lastKills.size() >= Config.getKillsHistory()) {
+            lastKills = lastKills.subList(1, lastKills.size());
+        }
+        lastKills.add(ep.getName());
         kills++;
     }
     
-    public void addDeath() {
+    public void addDeath(EloPlayer ep) {
+        if(lastDeaths.size() >= Config.getDeathsHistory()) {
+            lastDeaths = lastDeaths.subList(1, lastDeaths.size());
+        }
+        lastDeaths.add(ep.getName());
         deaths++;
     }
     
@@ -131,6 +159,14 @@ public class EloPlayer implements Comparable<EloPlayer> {
             i++;
         }
         return i;
+    }
+    
+    public List<String> getLastKills() {
+        return lastKills;
+    }
+    
+    public List<String> getLastDeaths() {
+        return lastDeaths;
     }
 
     @Override

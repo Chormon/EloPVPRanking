@@ -21,18 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.chormon.elopvpranking;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.logging.Level;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import pl.chormon.utils.MsgUtils;
 
 /**
  *
@@ -43,7 +44,7 @@ public class EloFile {
     private final String fileName;
     private File configFile;
     private FileConfiguration fileConfiguration;
-    
+
     public EloFile(String fileName) {
         if (EloPVPRanking.get() == null) {
             throw new IllegalArgumentException("plugin cannot be null");
@@ -96,66 +97,102 @@ public class EloFile {
         }
         reloadConfig();
     }
-    
+
     public void savePlayer(EloPlayer player) {
-        if(playerExists(player))
+        if (playerExists(player)) {
             setPlayer(player);
-        else
+        } else {
             addPlayer(player);
+        }
     }
-    
+
     private void addPlayer(EloPlayer player) {
-        String section = "players."+player.getUniqueId();
         setPlayer(player);
     }
-    
+
     private void setPlayer(EloPlayer player) {
-        String section = "players."+player.getUniqueId();
-        this.fileConfiguration.set(section+".name", player.getName());
-        this.fileConfiguration.set(section+".elopoints", player.getEloPoints());
-        this.fileConfiguration.set(section+".kills", player.getKills());
-        this.fileConfiguration.set(section+".deaths", player.getDeaths());
+        String path = "players." + player.getUniqueId();
+        this.fileConfiguration.set(path + ".name", player.getName());
+        this.fileConfiguration.set(path + ".elopoints", player.getEloPoints());
+        this.fileConfiguration.set(path + ".kills", player.getKills());
+        this.fileConfiguration.set(path + ".deaths", player.getDeaths());
+        List<String> lastKills = player.getLastKills();
+        if (lastKills.size() > Config.getKillsHistory()) {
+            int size = lastKills.size();
+            int diff = size - Config.getKillsHistory();
+            lastKills = lastKills.subList(diff, size);
+        }
+        List<String> lastDeaths = player.getLastDeaths();
+        if (lastDeaths.size() > Config.getDeathsHistory()) {
+            int size = lastDeaths.size();
+            int diff = size - Config.getDeathsHistory();
+            lastDeaths = lastDeaths.subList(diff, size);
+        }
+        this.fileConfiguration.set(path + ".lastKills", lastKills);
+        this.fileConfiguration.set(path + ".lastDeaths", lastDeaths);
         saveConfig();
     }
-    
+
     public boolean playerExists(EloPlayer player) {
-        String path = "players."+player.getUniqueId();
+        String path = "players." + player.getUniqueId();
         return this.fileConfiguration.contains(path);
     }
-    
+
     public EloPlayer getPlayer(UUID uniqueId) {
-        String path = "players."+uniqueId;
-        if(!this.fileConfiguration.contains(path))
+        String path = "players." + uniqueId;
+        if (!this.fileConfiguration.contains(path)) {
             return null;
+        }
         String name = this.fileConfiguration.getString(path + ".name");
         int eloPoints = this.fileConfiguration.getInt(path + ".elopoints");
-        int kills = this.fileConfiguration.getInt(path+".kills");
-        int deaths = this.fileConfiguration.getInt(path+".deaths");
-        return new EloPlayer(uniqueId, name, eloPoints, kills, deaths);
+        int kills = this.fileConfiguration.getInt(path + ".kills");
+        int deaths = this.fileConfiguration.getInt(path + ".deaths");
+
+        boolean needSave = false;
+        List<String> lastKills = this.fileConfiguration.getStringList(path + ".lastKills");
+        if (lastKills.size() > Config.getKillsHistory()) {
+            int size = lastKills.size();
+            int diff = size - Config.getKillsHistory();
+            lastKills = lastKills.subList(diff, size);
+            needSave = true;
+        }
+        List<String> lastDeaths = this.fileConfiguration.getStringList(path + ".lastDeaths");
+        if (lastDeaths.size() > Config.getDeathsHistory()) {
+            int size = lastDeaths.size();
+            int diff = size - Config.getDeathsHistory();
+            lastDeaths = lastDeaths.subList(diff, size);
+            needSave = true;
+        }
+        EloPlayer ep = new EloPlayer(uniqueId, name, eloPoints, kills, deaths, lastKills, lastDeaths);
+        if (needSave) {
+            savePlayer(ep);
+        }
+        return ep;
     }
-    
+
     public String getPlayerName(UUID uniqueId) {
-        String path = "players."+uniqueId;
-        if(!this.fileConfiguration.contains(path))
+        String path = "players." + uniqueId;
+        if (!this.fileConfiguration.contains(path)) {
             return null;
+        }
         return this.fileConfiguration.getString(path + ".name");
     }
-    
+
     public TreeMap<String, EloPlayer> getPlayers() {
         TreeMap<String, EloPlayer> players = new TreeMap<>();
-        
+
         try {
             Set<String> uuids = this.fileConfiguration.getConfigurationSection("players").getKeys(false);
 
-            for(String s : uuids) {
-                EloPlayer ep = new EloPlayer(UUID.fromString(s), this.fileConfiguration.getString("players."+s+".name"), this.fileConfiguration.getInt("players."+s+".elopoints"), this.fileConfiguration.getInt("players."+s+".kills"), this.fileConfiguration.getInt("players."+s+".deaths"));
+            for (String s : uuids) {
+                EloPlayer ep = getPlayer(UUID.fromString(s));
                 players.put(ep.getName().toLowerCase(), ep);
             }
-
+            saveConfig();
             return players;
         } catch (Exception ex) {
             return null;
         }
     }
-    
+
 }
