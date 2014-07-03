@@ -9,19 +9,25 @@ settings:
   maxPoints: "inf"
   # "-inf" (minus nieskończoność) lub dowolna liczba całkowita
   minPoints: 0
+  # ilość zapamiętanych ostatnich zabójstw
+  killsHistory: 5
+  # ilość zapamiętanych ostatnich śmierci
+  deathsHistory: 5
   # światy, w których liczone są śmierci ([] - wszystkie)
   worlds: []
 
 # wiadomosci
 messages:
-  eloHeader: "&2Twoje statystyki PVP:"
-  eloHeaderOther: "&2Statystyki PVP gracza &f{player}&2:"
+  eloHeader: "&2-----[ &fTwoje statystyki PVP &2]-----"
+  eloHeaderOther: "&2-----[ &fStatystyki PVP gracza &a{player} &2]-----"
   eloKills: "&2Ilosc zabojstw/Ilosc smierci: &f{kills}/{deaths} &2(KDR: &f{kdr}&2)"
   eloPoints: "&2Punkty: &f{points} &2(&f{ranking} &2miejsce w rankingu)"
+  lastKills: "&2Ostatnie zabojstwa: &f{players}"
+  lastDeaths: "&2Ostatnie smierci: &f{players}"
   error: "&4Stalo sie cos zlego i nie mozna wykonac tej komendy. Jesli to sie powtorzy, skontaktuj sie z administracja serwera!"
   noPlayers: "&4Brak graczy w rankingu!"
   playerNotExist: "&4Gracz {player} nie istnieje!"
-  topHeader: "&2-----[&f Top {amount} graczy w rankingu Elo &2]-----"
+  topHeader: "&2-----[ &fTop &a{amount} &fgraczy w rankingu Elo &2]-----"
   top: "&7{lp}. &2{player} &7- &f{points} pkt."
   topMore: "&2Wiecej &7- &f/elotop {page}"
   lostPoints: "&2Straciles &f{lost} &2puntkow i masz ich teraz &f{points}&2. Jestes na &f{ranking} &2miejscu w rankingu."
