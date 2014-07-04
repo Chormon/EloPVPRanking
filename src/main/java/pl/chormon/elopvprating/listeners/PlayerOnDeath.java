@@ -29,7 +29,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import pl.chormon.elopvpranking.Config;
 import pl.chormon.elopvpranking.EloPVPRanking;
 import pl.chormon.elopvpranking.EloPlayer;
@@ -39,11 +38,7 @@ import pl.chormon.utils.MsgUtils;
  *
  * @author Chormon
  */
-public class PlayerListeners implements Listener {
-
-    public PlayerListeners() {
-        EloPVPRanking.get().getServer().getPluginManager().registerEvents(this, EloPVPRanking.get());
-    }
+public class PlayerOnDeath implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onDeath(PlayerDeathEvent e) {
@@ -100,10 +95,4 @@ public class PlayerListeners implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onJoin(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-        EloPlayer ep = new EloPlayer(p.getUniqueId(), p.getName());
-        ep.save();
-    }
 }

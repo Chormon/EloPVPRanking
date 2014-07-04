@@ -30,7 +30,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.chormon.elopvpranking.commands.*;
-import pl.chormon.elopvprating.listeners.PlayerListeners;
+import pl.chormon.elopvprating.listeners.*;
 import pl.chormon.utils.MsgUtils;
 
 /**
@@ -51,7 +51,8 @@ public class EloPVPRanking extends JavaPlugin {
         PluginDescriptionFile pdf = this.getDescription();
         Config.initConfig();
         eloFile = new EloFile("elopoints.yml");
-        new PlayerListeners();
+        getServer().getPluginManager().registerEvents(new PlayerOnJoin(), plugin);
+        getServer().getPluginManager().registerEvents(new PlayerOnDeath(), plugin);
         MsgUtils.setConsole(Bukkit.getConsoleSender());
         eloPlayers = eloFile.getPlayers();
         if (eloPlayers == null) {
