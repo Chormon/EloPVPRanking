@@ -53,11 +53,11 @@ public class MsgUtils {
     }
 
     public static void warning(String msg) {
-        MsgUtils.log("&c[WARNING]&r" + msg, (Object) null);
+        MsgUtils.log("&e[WARNING]&r" + msg, (Object) null);
     }
 
     public static void warning(String msg, Object... vars) {
-        MsgUtils.log("&c[WARNING]&r" + msg, vars);
+        MsgUtils.log("&e[WARNING]&r" + msg, vars);
     }
 
     public static void error(String msg) {

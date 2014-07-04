@@ -26,6 +26,8 @@ package pl.chormon.elopvpranking;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
@@ -33,7 +35,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import pl.chormon.utils.MsgUtils;
 
 /**
  *
@@ -44,6 +45,7 @@ public class EloFile {
     private final String fileName;
     private File configFile;
     private FileConfiguration fileConfiguration;
+    private SimpleDateFormat sdf;
 
     public EloFile(String fileName) {
         if (EloPVPRanking.get() == null) {
@@ -59,6 +61,7 @@ public class EloFile {
         }
         this.configFile = new File(EloPVPRanking.get().getDataFolder(), fileName);
         this.saveDefaultConfig();
+        this.sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     public void reloadConfig() {
@@ -130,6 +133,7 @@ public class EloFile {
         }
         this.fileConfiguration.set(path + ".lastKills", lastKills);
         this.fileConfiguration.set(path + ".lastDeaths", lastDeaths);
+        this.fileConfiguration.set(path + ".lastVisit", sdf.format(player.getLastVisit()));
         saveConfig();
     }
 
@@ -163,7 +167,14 @@ public class EloFile {
             lastDeaths = lastDeaths.subList(diff, size);
             needSave = true;
         }
-        EloPlayer ep = new EloPlayer(uniqueId, name, eloPoints, kills, deaths, lastKills, lastDeaths);
+        Date date = null;
+        try {
+            date = sdf.parse(this.fileConfiguration.getString(path + ".lastVisit"));
+        } catch (Exception ex) {
+            date = new Date();
+            needSave = true;
+        }
+        EloPlayer ep = new EloPlayer(uniqueId, name, eloPoints, kills, deaths, lastKills, lastDeaths, date);
         if (needSave) {
             savePlayer(ep);
         }
@@ -193,6 +204,10 @@ public class EloFile {
         } catch (Exception ex) {
             return null;
         }
+    }
+    
+    public void removePlayer(UUID uniqueId) {
+        this.fileConfiguration.getConfigurationSection("players").set(uniqueId.toString(), null);
     }
 
 }

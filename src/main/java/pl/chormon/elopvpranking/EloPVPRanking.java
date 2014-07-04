@@ -30,6 +30,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.chormon.elopvpranking.commands.*;
+import pl.chormon.elopvpranking.schedulers.InactivePlayerRemover;
 import pl.chormon.elopvprating.listeners.*;
 import pl.chormon.utils.MsgUtils;
 
@@ -52,6 +53,7 @@ public class EloPVPRanking extends JavaPlugin {
         Config.initConfig();
         eloFile = new EloFile("elopoints.yml");
         getServer().getPluginManager().registerEvents(new PlayerOnJoin(), plugin);
+        getServer().getPluginManager().registerEvents(new PlayerOnQuit(), plugin);
         getServer().getPluginManager().registerEvents(new PlayerOnDeath(), plugin);
         MsgUtils.setConsole(Bukkit.getConsoleSender());
         eloPlayers = eloFile.getPlayers();
@@ -62,6 +64,7 @@ public class EloPVPRanking extends JavaPlugin {
         getCommand("Elotop").setExecutor(new CmdEloTop());
         getCommand("EloReload").setExecutor(new CmdEloReload());
         getCommand("EloInfo").setExecutor(new CmdEloInfo());
+        new InactivePlayerRemover(Config.getRemoveAfter()).runTaskTimer(plugin, 0L, 72000);
         MsgUtils.info("{name} {version} enabled!", "{name}", pdf.getName(), "{version}", pdf.getVersion());
     }
 

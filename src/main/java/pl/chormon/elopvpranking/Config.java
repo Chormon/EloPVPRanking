@@ -102,4 +102,8 @@ public class Config {
     public static int getDeathsHistory() {
         return EloPVPRanking.get().getConfig().getInt("settings.deathsHistory");
     }
+    
+    public static long getRemoveAfter() {
+        return EloPVPRanking.get().getConfig().getLong("settings.removeAfter");
+    }
 }

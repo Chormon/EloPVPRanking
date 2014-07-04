@@ -24,6 +24,7 @@
 package pl.chormon.elopvpranking;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -42,6 +43,7 @@ public class EloPlayer implements Comparable<EloPlayer> {
     private int deaths;
     private List<String> lastKills;
     private List<String> lastDeaths;
+    private Date lastVisit;
 
     public EloPlayer(UUID uniqueId, String name) {
         this.uniqueId = uniqueId;
@@ -53,6 +55,7 @@ public class EloPlayer implements Comparable<EloPlayer> {
             this.deaths = ep.getDeaths();
             this.lastKills = ep.getLastKills();
             this.lastDeaths = ep.getLastDeaths();
+            this.lastVisit = ep.getLastVisit();
             return;
         }
         this.name = name;
@@ -61,19 +64,20 @@ public class EloPlayer implements Comparable<EloPlayer> {
         this.deaths = 0;
         this.lastKills = new ArrayList<>();
         this.lastDeaths = new ArrayList<>();
+        this.lastVisit = new Date();
     }
 
-    public EloPlayer(UUID uniqueId, String name, int eloPoints, int kills, int deaths) {
-        this.uniqueId = uniqueId;
-        this.name = name;
-        this.eloPoints = eloPoints;
-        this.kills = kills;
-        this.deaths = deaths;
-        this.lastKills = new ArrayList<>();
-        this.lastDeaths = new ArrayList<>();
-    }
-
-    public EloPlayer(UUID uniqueId, String name, int eloPoints, int kills, int deaths, List<String> lastKills, List<String> lastDeaths) {
+//    public EloPlayer(UUID uniqueId, String name, int eloPoints, int kills, int deaths) {
+//        this.uniqueId = uniqueId;
+//        this.name = name;
+//        this.eloPoints = eloPoints;
+//        this.kills = kills;
+//        this.deaths = deaths;
+//        this.lastKills = new ArrayList<>();
+//        this.lastDeaths = new ArrayList<>();
+//        this.lastVisit = new Date();
+//    }
+    public EloPlayer(UUID uniqueId, String name, int eloPoints, int kills, int deaths, List<String> lastKills, List<String> lastDeaths, Date lastVisit) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.eloPoints = eloPoints;
@@ -81,20 +85,21 @@ public class EloPlayer implements Comparable<EloPlayer> {
         this.deaths = deaths;
         this.lastKills = lastKills;
         this.lastDeaths = lastDeaths;
+        this.lastVisit = lastVisit;
     }
 
     public void save() {
         String lastName = EloPVPRanking.get().getEloFile().getPlayerName(uniqueId);
         EloPVPRanking.get().getEloFile().savePlayer(this);
-        if(EloPVPRanking.get().eloPlayers.containsKey(name.toLowerCase())) {
+        if (EloPVPRanking.get().eloPlayers.containsKey(name.toLowerCase())) {
             EloPlayer ep = EloPVPRanking.get().eloPlayers.get(name.toLowerCase());
-            if(this != ep) {
+            if (this != ep) {
                 EloPVPRanking.get().eloPlayers.remove(name.toLowerCase());
                 EloPVPRanking.get().eloPlayers.put(name.toLowerCase(), this);
             }
             return;
         }
-        if(lastName != null && !lastName.isEmpty() && EloPVPRanking.get().eloPlayers.containsKey(lastName.toLowerCase())) {
+        if (lastName != null && !lastName.isEmpty() && EloPVPRanking.get().eloPlayers.containsKey(lastName.toLowerCase())) {
             EloPVPRanking.get().eloPlayers.remove(lastName.toLowerCase());
             EloPVPRanking.get().eloPlayers.put(name.toLowerCase(), this);
             return;
@@ -125,75 +130,95 @@ public class EloPlayer implements Comparable<EloPlayer> {
     public int getDeaths() {
         return deaths;
     }
-    
+
     public void addKill(EloPlayer ep) {
-        if(lastKills.size() >= Config.getKillsHistory()) {
+        if (lastKills.size() >= Config.getKillsHistory()) {
             lastKills = lastKills.subList(1, lastKills.size());
         }
         lastKills.add(ep.getName());
         kills++;
     }
-    
+
     public void addDeath(EloPlayer ep) {
-        if(lastDeaths.size() >= Config.getDeathsHistory()) {
+        if (lastDeaths.size() >= Config.getDeathsHistory()) {
             lastDeaths = lastDeaths.subList(1, lastDeaths.size());
         }
         lastDeaths.add(ep.getName());
         deaths++;
     }
     
+    public void setLastVisit() {
+        lastVisit = new Date();
+    }
+
+    public void setLastVisit(Date date) {
+        lastVisit = date;
+    }
+
     public float getKDR() {
-        if(deaths == 0)
+        if (deaths == 0) {
             return kills;
-        return kills/deaths;
+        }
+        return kills / deaths;
     }
 
     public int getRanking() {
         EloPVPRanking plugin = EloPVPRanking.get();
         Map sorted = new TreeMap(new ValueComparator((plugin.eloPlayers)));
-        sorted.putAll(plugin.eloPlayers);       
+        sorted.putAll(plugin.eloPlayers);
         int i = 1;
-        for(Object s : sorted.keySet()) {
-            if(name.equalsIgnoreCase((String) s))
+        for (Object s : sorted.keySet()) {
+            if (name.equalsIgnoreCase((String) s)) {
                 break;
+            }
             i++;
         }
         return i;
     }
-    
+
     public List<String> getLastKills() {
         return lastKills;
     }
-    
+
     public List<String> getLastDeaths() {
         return lastDeaths;
+    }
+
+    public Date getLastVisit() {
+        return lastVisit;
     }
 
     @Override
     public int compareTo(EloPlayer o) {
         int ept = Integer.compare(o.eloPoints, eloPoints);
-        if(ept != 0)
+        if (ept != 0) {
             return ept;
+        }
         int kdr = Float.compare(o.getKDR(), getKDR());
-        if(kdr != 0)
+        if (kdr != 0) {
             return kdr;
+        }
         int k = Integer.compare(o.kills, kills);
-        if(k != 0)
+        if (k != 0) {
             return k;
+        }
         int d = Integer.compare(deaths, o.deaths);
-        if(d != 0)
+        if (d != 0) {
             return d;
+        }
         return name.compareTo(o.name);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof EloPlayer) {
+        if (obj instanceof EloPlayer) {
             EloPlayer ep = (EloPlayer) obj;
-            if(ep.getName() != this.name)
+            if (ep.getName() != this.name) {
                 return false;
-            if(ep.getEloPoints()!= this.eloPoints)
+            }
+            if (ep.getEloPoints() != this.eloPoints) {
                 return false;
+            }
             return true;
         }
         return false;
@@ -201,7 +226,7 @@ public class EloPlayer implements Comparable<EloPlayer> {
 
     @Override
     public String toString() {
-        return "EloPlayer{" + "uniqueId=" + uniqueId + ", name=" + name + ", eloPoints=" + eloPoints + ", kills=" + kills + ", deaths=" + deaths + '}';
+        return "EloPlayer{" + "uniqueId=" + uniqueId + ", name=" + name + ", eloPoints=" + eloPoints + ", kills=" + kills + ", deaths=" + deaths + ", KDR=" + getKDR() + ", lastKills=" + getLastKills() + ", lastDeaths=" + getLastDeaths() + "}";
     }
-    
+
 }
