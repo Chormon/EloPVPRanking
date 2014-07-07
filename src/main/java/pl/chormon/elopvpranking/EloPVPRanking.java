@@ -23,7 +23,9 @@
  */
 package pl.chormon.elopvpranking;
 
-import java.util.Map;
+import pl.chormon.elopvpranking.listeners.PlayerOnQuit;
+import pl.chormon.elopvpranking.listeners.PlayerOnDeath;
+import pl.chormon.elopvpranking.listeners.PlayerOnJoin;
 import java.util.TreeMap;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
@@ -31,7 +33,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.chormon.elopvpranking.commands.*;
 import pl.chormon.elopvpranking.schedulers.InactivePlayerRemover;
-import pl.chormon.elopvprating.listeners.*;
 import pl.chormon.utils.MsgUtils;
 
 /**
@@ -77,19 +78,6 @@ public class EloPVPRanking extends JavaPlugin {
 
     public EloFile getEloFile() {
         return eloFile;
-    }
-
-    public int calculateRanking(String name) {
-        Map sorted = new TreeMap(new ValueComparator((eloPlayers)));
-        sorted.putAll(eloPlayers);
-        int i = 1;
-        for (Object s : sorted.keySet()) {
-            if (name.equalsIgnoreCase((String) s)) {
-                break;
-            }
-            i++;
-        }
-        return i;
     }
 
     public static EloPVPRanking get() {

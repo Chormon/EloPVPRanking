@@ -43,7 +43,7 @@ public class InactivePlayerRemover extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (this.days < 0) {
+        if (this.days < 1) {
             return;
         }
         boolean removed = false;

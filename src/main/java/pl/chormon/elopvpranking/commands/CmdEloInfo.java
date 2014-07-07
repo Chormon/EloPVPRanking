@@ -37,8 +37,7 @@ import pl.chormon.elopvpranking.EloPVPRanking;
 public class CmdEloInfo implements CommandExecutor {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        String info = "";        
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {    
         StringBuilder sb = new StringBuilder();
         sb.append("&2Wersja: &f");
         sb.append(EloPVPRanking.getVersion());

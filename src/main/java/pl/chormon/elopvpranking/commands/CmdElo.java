@@ -51,7 +51,6 @@ public class CmdElo implements CommandExecutor {
                 EloPlayer ep = plugin.eloPlayers.get(name);
                 if (ep == null) {
                     MsgUtils.msg(sender, Config.getMessage("playerNotExist"), "{player}", name);
-//                    sender.sendMessage(Config.getMessage("playerNotExist", name));
                     return true;
                 }
                 if (sender instanceof Player) {
@@ -88,13 +87,15 @@ public class CmdElo implements CommandExecutor {
         MsgUtils.msg(sender, Config.getMessage("eloPoints"), "{points}", ep.getEloPoints(), "{ranking}", ep.getRanking());
         StringBuilder sb1 = new StringBuilder();
         List<String> lastKills = ep.getLastKills();
+        String separator = Config.getMessage("separator");
         if (lastKills.isEmpty()) {
             sb1.append(Config.getMessage("none"));
         } else {
             for (int i = Config.getKillsHistory() > lastKills.size() ? lastKills.size() - 1 : Config.getKillsHistory() - 1; i >= 0; i--) {
                 sb1.append(lastKills.get(i));
-                if(i-1 > 0)
-                    sb1.append(Config.getMessage("separator"));
+                if (i > 0) {
+                    sb1.append(separator);
+                }
             }
         }
         StringBuilder sb2 = new StringBuilder();
@@ -104,8 +105,9 @@ public class CmdElo implements CommandExecutor {
         } else {
             for (int i = Config.getDeathsHistory() > lastDeaths.size() ? lastDeaths.size() - 1 : Config.getDeathsHistory() - 1; i >= 0; i--) {
                 sb2.append(lastDeaths.get(i));
-                if(i-1 > 0)
-                    sb2.append(Config.getMessage("separator"));
+                if (i > 0) {
+                    sb2.append(separator);
+                }
             }
         }
         MsgUtils.msg(sender, Config.getMessage("lastKills"), "{players}", sb1.toString());

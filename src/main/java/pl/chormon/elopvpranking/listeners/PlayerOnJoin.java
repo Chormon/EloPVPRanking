@@ -21,32 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package pl.chormon.elopvprating.listeners;
+package pl.chormon.elopvpranking.listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
-import pl.chormon.elopvpranking.EloPVPRanking;
+import org.bukkit.event.player.PlayerJoinEvent;
 import pl.chormon.elopvpranking.EloPlayer;
 
 /**
  *
  * @author Chormon
  */
-public class PlayerOnQuit implements Listener {
+public class PlayerOnJoin implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onQuit(PlayerQuitEvent e) {
+    public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        if (p == null) {
-            return;
-        }
-        EloPlayer ep = EloPVPRanking.get().eloPlayers.get(p.getName().toLowerCase());
-        if (ep == null) {
-            return;
-        }
+        EloPlayer ep = new EloPlayer(p.getUniqueId(), p.getName());
         ep.setLastVisit();
         ep.save();
     }
