@@ -35,6 +35,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import pl.chormon.utils.MsgUtils;
 
 /**
  *
@@ -102,14 +103,6 @@ public class EloFile {
     }
 
     public void savePlayer(EloPlayer player) {
-        if (playerExists(player)) {
-            setPlayer(player);
-        } else {
-            addPlayer(player);
-        }
-    }
-
-    private void addPlayer(EloPlayer player) {
         setPlayer(player);
     }
 
@@ -137,9 +130,20 @@ public class EloFile {
         saveConfig();
     }
 
-    public boolean playerExists(EloPlayer player) {
-        String path = "players." + player.getUniqueId();
+    public boolean playerExists(UUID uniqueId) {
+        String path = "players." + uniqueId.toString();
         return this.fileConfiguration.contains(path);
+    }
+
+    public UUID playerExists(String name) {
+        String path = "players.";
+        Set<String> uuids = this.fileConfiguration.getConfigurationSection("players").getKeys(false);
+        for (String s : uuids) {
+            String n = this.fileConfiguration.getString(path + s + ".name");
+            if(name.equalsIgnoreCase(n))
+                return UUID.fromString(s);
+        }
+        return null;
     }
 
     public EloPlayer getPlayer(UUID uniqueId) {
@@ -197,7 +201,9 @@ public class EloFile {
 
             for (String s : uuids) {
                 EloPlayer ep = getPlayer(UUID.fromString(s));
-                players.put(ep.getName().toLowerCase(), ep);
+                EloPlayer old = players.put(ep.getName().toLowerCase(), ep);
+                if(old != null)
+                    MsgUtils.warning("Player {oldplayer} was replaced with player {newplayer}", "{oldplayer}", old.getName(), "{newplayer}", ep.getName());
             }
             saveConfig();
             return players;
@@ -205,7 +211,7 @@ public class EloFile {
             return null;
         }
     }
-    
+
     public void removePlayer(UUID uniqueId) {
         this.fileConfiguration.getConfigurationSection("players").set(uniqueId.toString(), null);
     }

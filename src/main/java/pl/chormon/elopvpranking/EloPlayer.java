@@ -47,9 +47,9 @@ public class EloPlayer implements Comparable<EloPlayer> {
 
     public EloPlayer(UUID uniqueId, String name) {
         this.uniqueId = uniqueId;
-        EloPlayer ep = EloPVPRanking.get().getEloFile().getPlayer(uniqueId);
+        EloPlayer ep = EloPVPRanking.get().getEloFile().getPlayer(this.uniqueId);
         if (ep != null) {
-            this.name = name;
+            this.name = ep.getName();
             this.eloPoints = ep.getEloPoints();
             this.kills = ep.getKills();
             this.deaths = ep.getDeaths();
@@ -66,17 +66,7 @@ public class EloPlayer implements Comparable<EloPlayer> {
         this.lastDeaths = new ArrayList<>();
         this.lastVisit = new Date();
     }
-
-//    public EloPlayer(UUID uniqueId, String name, int eloPoints, int kills, int deaths) {
-//        this.uniqueId = uniqueId;
-//        this.name = name;
-//        this.eloPoints = eloPoints;
-//        this.kills = kills;
-//        this.deaths = deaths;
-//        this.lastKills = new ArrayList<>();
-//        this.lastDeaths = new ArrayList<>();
-//        this.lastVisit = new Date();
-//    }
+    
     public EloPlayer(UUID uniqueId, String name, int eloPoints, int kills, int deaths, List<String> lastKills, List<String> lastDeaths, Date lastVisit) {
         this.uniqueId = uniqueId;
         this.name = name;
@@ -93,7 +83,7 @@ public class EloPlayer implements Comparable<EloPlayer> {
         EloPVPRanking.get().getEloFile().savePlayer(this);
         if (EloPVPRanking.get().eloPlayers.containsKey(name.toLowerCase())) {
             EloPlayer ep = EloPVPRanking.get().eloPlayers.get(name.toLowerCase());
-            if (this != ep) {
+            if (!this.equals(ep)) {
                 EloPVPRanking.get().eloPlayers.remove(name.toLowerCase());
                 EloPVPRanking.get().eloPlayers.put(name.toLowerCase(), this);
             }

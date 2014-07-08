@@ -35,6 +35,9 @@ public class MsgUtils {
 
     private static ConsoleCommandSender console;
     private final static String prefix = "&e[EloPVPRanking]&r";
+    private final static String info = "&a[INFO]&r ";
+    private final static String warning = "&e[WARNING]&r ";
+    private final static String error = "&c[ERROR]&r ";
 
     public static void setConsole(ConsoleCommandSender console) {
         MsgUtils.console = console;
@@ -45,27 +48,27 @@ public class MsgUtils {
     }
 
     public static void info(String msg) {
-        MsgUtils.log("&a[INFO]&r" + msg, (Object) null);
+        MsgUtils.log(info + msg, (Object) null);
     }
 
     public static void info(String msg, Object... vars) {
-        MsgUtils.log("&a[INFO]&r" + msg, vars);
+        MsgUtils.log(info + msg, vars);
     }
 
     public static void warning(String msg) {
-        MsgUtils.log("&e[WARNING]&r" + msg, (Object) null);
+        MsgUtils.log(warning + msg, (Object) null);
     }
 
     public static void warning(String msg, Object... vars) {
-        MsgUtils.log("&e[WARNING]&r" + msg, vars);
+        MsgUtils.log(warning + msg, vars);
     }
 
     public static void error(String msg) {
-        MsgUtils.log("&c[ERROR]&r" + msg, (Object) null);
+        MsgUtils.log(error + msg, (Object) null);
     }
 
     public static void error(String msg, Object... vars) {
-        MsgUtils.log("&c[ERROR]&r" + msg, vars);
+        MsgUtils.log(error + msg, vars);
     }
 
     public static void msg(CommandSender cs, String msg) {

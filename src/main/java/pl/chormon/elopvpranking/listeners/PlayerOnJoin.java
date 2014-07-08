@@ -23,12 +23,15 @@
  */
 package pl.chormon.elopvpranking.listeners;
 
+import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import pl.chormon.elopvpranking.EloPVPRanking;
 import pl.chormon.elopvpranking.EloPlayer;
+import pl.chormon.utils.MsgUtils;
 
 /**
  *
@@ -39,9 +42,23 @@ public class PlayerOnJoin implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        EloPlayer ep = new EloPlayer(p.getUniqueId(), p.getName());
+        UUID uuid = EloPVPRanking.get().getEloFile().playerExists(p.getName());
+        EloPlayer ep2 = EloPVPRanking.get().eloPlayers.get(p.getName().toLowerCase());
+        UUID uniqueId = p.getUniqueId();
+        if (uuid != null && !uuid.equals(p.getUniqueId())) {
+            uniqueId = uuid;
+            sendMessage(p.getName(), uuid.toString(), EloPVPRanking.get().getEloFile().getPlayerName(uuid));
+        } else if(ep2 != null && !ep2.getUniqueId().equals(p.getUniqueId())) {
+            uniqueId = ep2.getUniqueId();
+            sendMessage(p.getName(), ep2.getUniqueId().toString(), ep2.getName());
+        }
+        EloPlayer ep = new EloPlayer(uniqueId, p.getName());
         ep.setLastVisit();
         ep.save();
+    }
+    
+    private void sendMessage(String name, String uuid, String name2) {
+        MsgUtils.warning("Player {player} is already in database under different UUID ({uuid}) and name ({name})!", "{player}", name, "{uuid}", uuid, "{name}", name2);
     }
 
 }

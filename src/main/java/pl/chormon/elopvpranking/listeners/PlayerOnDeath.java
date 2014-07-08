@@ -56,12 +56,12 @@ public class PlayerOnDeath implements Listener {
         EloPlayer victim = EloPVPRanking.get().eloPlayers.get(e.getEntity().getName().toLowerCase());
         if (victim == null) {
             Player p = e.getEntity();
-            victim = new EloPlayer(p.getUniqueId(), p.getName());
+            victim = EloPVPRanking.get().eloPlayers.get(p.getName().toLowerCase());
         }
         EloPlayer killer = EloPVPRanking.get().eloPlayers.get(e.getEntity().getKiller().getName().toLowerCase());
         if (killer == null) {
             Player p = e.getEntity().getKiller();
-            killer = new EloPlayer(p.getUniqueId(), p.getName());
+            killer = EloPVPRanking.get().eloPlayers.get(p.getName().toLowerCase());
         }
 
         int Rv = victim.getEloPoints();
