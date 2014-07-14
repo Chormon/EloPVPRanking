@@ -149,7 +149,7 @@ public class EloPlayer implements Comparable<EloPlayer> {
         if (deaths == 0) {
             return kills;
         }
-        return kills / deaths;
+        return (float) kills / (float) deaths;
     }
 
     public int getRanking() {
