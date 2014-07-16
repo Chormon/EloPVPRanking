@@ -23,15 +23,15 @@
  */
 package pl.chormon.elopvpranking;
 
-import pl.chormon.elopvpranking.listeners.PlayerOnQuit;
-import pl.chormon.elopvpranking.listeners.PlayerOnDeath;
-import pl.chormon.elopvpranking.listeners.PlayerOnJoin;
+import java.io.IOException;
 import java.util.TreeMap;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.MetricsLite;
 import pl.chormon.elopvpranking.commands.*;
+import pl.chormon.elopvpranking.listeners.*;
 import pl.chormon.elopvpranking.schedulers.InactivePlayerRemover;
 import pl.chormon.utils.MsgUtils;
 
@@ -57,6 +57,7 @@ public class EloPVPRanking extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerOnQuit(), plugin);
         getServer().getPluginManager().registerEvents(new PlayerOnDeath(), plugin);
         MsgUtils.setConsole(Bukkit.getConsoleSender());
+        enableMetrics();
         eloPlayers = eloFile.getPlayers();
         if (eloPlayers == null) {
             eloPlayers = new TreeMap<>();
@@ -86,6 +87,15 @@ public class EloPVPRanking extends JavaPlugin {
 
     public static String getVersion() {
         return version;
+    }
+
+    private void enableMetrics() {
+        try {
+            MetricsLite metrics = new MetricsLite(this);
+            metrics.start();
+        } catch (IOException e) {
+            MsgUtils.error("Failed to submit the stats");
+        }
     }
 
 }
