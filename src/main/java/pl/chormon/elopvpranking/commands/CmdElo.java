@@ -83,7 +83,8 @@ public class CmdElo implements CommandExecutor {
         } else {
             MsgUtils.msg(sender, Config.getMessage("eloHeaderOther"), "{player}", ep.getName());
         }
-        MsgUtils.msg(sender, Config.getMessage("eloKills"), "{kills}", ep.getKills(), "{deaths}", ep.getDeaths(), "{kdr}", ep.getKDR());
+        String kdr = ep.getKDR() == (int) ep.getKDR() ? String.valueOf((int) ep.getKDR()) : String.format("%.2f", ep.getKDR());
+        MsgUtils.msg(sender, Config.getMessage("eloKills"), "{kills}", ep.getKills(), "{deaths}", ep.getDeaths(), "{kdr}", kdr);
         MsgUtils.msg(sender, Config.getMessage("eloPoints"), "{points}", ep.getEloPoints(), "{ranking}", ep.getRanking());
         StringBuilder sb1 = new StringBuilder();
         List<String> lastKills = ep.getLastKills();
