@@ -45,6 +45,9 @@ public class PlayerOnDeath implements Listener {
         if (!(e.getEntity().getKiller() instanceof Player)) {
             return;
         }
+        if (e.getEntity().getKiller().equals(e.getEntity())) {
+            return;
+        }
         List<String> worlds = Config.getWorlds();
 
         String world = e.getEntity().getWorld().getName();
@@ -66,18 +69,23 @@ public class PlayerOnDeath implements Listener {
 
         int Rv = victim.getEloPoints();
         int Rk = killer.getEloPoints();
-        float Ev = (float) (1 / (1 + Math.pow(10, (Rk - Rv) / 400f)));
-        float Ek = (float) (1 / (1 + Math.pow(10, (Rv - Rk) / 400f)));
+//        float Ev = (float) (1 / (1 + Math.pow(10, (Rk - Rv) / 400f)));
+//        float Ek = (float) (1 / (1 + Math.pow(10, (Rv - Rk) / 400f)));
         int C = Config.getConstantValue();
-        int Rvn = Math.max(Math.round(Rv + C * (-Ev)), Integer.MIN_VALUE);
-        int Rkn = Math.min(Math.round(Rk + C * (1 - Ek)), Integer.MAX_VALUE);
-
-        if (Rvn < Config.getMinPoints()) {
-            Rvn = Config.getMinPoints();
-        }
-        if (Rkn > Config.getMaxPoints()) {
-            Rkn = Config.getMaxPoints();
-        }
+//        int Rvn = Math.max(Math.round(Rv + C * (-Ev)), Integer.MIN_VALUE);
+//        int Rkn = Math.min(Math.round(Rk + C * (1 - Ek)), Integer.MAX_VALUE);
+//
+//        if (Rvn < Config.getMinPoints()) {
+//            Rvn = Config.getMinPoints();
+//        }
+//        if (Rkn > Config.getMaxPoints()) {
+//            Rkn = Config.getMaxPoints();
+//        }
+        
+        int min = Config.getMinPoints();
+        int max = Config.getMaxPoints();
+        int Rvn = calcElo(Rv, Rk, C, false, min, max);
+        int Rkn = calcElo(Rk, Rv, C, true, min, max);
 
         victim.setEloPoints(Rvn);
         victim.addDeath(killer);
@@ -93,6 +101,25 @@ public class PlayerOnDeath implements Listener {
         if (Config.getLogPointsChange()) {
             MsgUtils.info("Player &f{player}&r gained &f{gained} &rpoints and now has &f{points}&r.", "{player}", killer.getName(), "{gained}", Rkn - Rk, "{points}", Rkn);
         }
+    }
+
+    private static int calcElo(int my, int opp, int C, boolean win, int min, int max) {
+        float e = (float) (1 / (1 + Math.pow(10, (opp - my) / 400f)));
+        int newElo;
+
+        if (win) {
+            newElo = Math.min(Math.round(my + C * (1 - e)), Integer.MAX_VALUE);
+        } else {
+            newElo = Math.max(Math.round(my + C * (-e)), Integer.MIN_VALUE);
+        }
+
+        if (newElo < min) {
+            return min;
+        } else if (newElo > max) {
+            return max;
+        }
+
+        return newElo;
     }
 
 }

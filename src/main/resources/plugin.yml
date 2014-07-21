@@ -32,7 +32,7 @@ permissions:
     default: true
   elopvpranking.elo.other:
     description: Pozwala na sprawdzenie rankingu ELO innych graczy
-    default: op
+    default: true
     children:
        elopvpranking.elo: true
   elopvpranking.elotop:

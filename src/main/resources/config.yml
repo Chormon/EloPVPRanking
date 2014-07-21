@@ -1,21 +1,21 @@
 # ustawienia
 settings:
-  startingPoints: 1000
+  startingPoints: 1500
   constantValue: 32
   playersTop: 21
   playersPerPage: 7
   logPointsChange: true
-  # "inf" (nieskończoność) lub dowolna liczba całkowita
-  maxPoints: "inf"
-  # "-inf" (minus nieskończoność) lub dowolna liczba całkowita
+  # liczba calkowita z zakresu <-2147483648; 2147483647>
+  maxPoints: "3200"
+  # liczba calkowita z zakresu <-2147483648; 2147483647>
   minPoints: 0
-  # ilość zapamiętanych ostatnich zabójstw
+  # ilosc zapamietanych ostatnich zabojstw
   killsHistory: 5
-  # ilość zapamiętanych ostatnich śmierci
+  # ilosc zapamietanych ostatnich smierci
   deathsHistory: 5
-  # światy, w których liczone są śmierci ([] - wszystkie)
+  # swiaty, w ktorych liczone sa smierci ([] - wszystkie)
   worlds: []
-  # po ilu dniach nieobecności na serwerze usunąć statystyki gracza (0 - wyłącza)
+  # po ilu dniach nieobecnosci na serwerze usunac statystyki gracza (0 - wylacza)
   removeAfter: 0
 
 # wiadomosci
@@ -30,9 +30,13 @@ messages:
   error: "&4Stalo sie cos zlego i nie mozna wykonac tej komendy. Jesli to sie powtorzy, skontaktuj sie z administracja serwera!"
   noPlayers: "&4Brak graczy w rankingu!"
   playerNotExist: "&4Gracz {player} nie istnieje!"
-  topHeader: "&2-----[ &fTop &a{amount} &fgraczy w rankingu Elo &2]-----"
+  topHeader: "&2-----[ &fTop &a{amount} &fgraczy w rankingu PVP &2]-----"
   top: "&7{lp}. &2{player} &7- &f{points} pkt."
   topMore: "&2Wiecej &7- &f/elotop {page}"
   lostPoints: "&2Straciles &f{lost} &2puntkow i masz ich teraz &f{points}&2. Jestes na &f{ranking} &2miejscu w rankingu."
   gainedPoints: "&2Zdobyles &f{gained} &2puntkow i masz ich teraz &f{points}&2. Jestes na &f{ranking} &2miejscu w rankingu."
   none: "brak"
+  noPermissions: "&4Nie posiadasz uprawnien do wywolania tej komendy!"
+  tooManyArgs: "&4Za duzo argumentow!"
+  notEnoughArgs: "&4Za malo arguentow!"
+  usage: "&2Uzycie: &f{command}"

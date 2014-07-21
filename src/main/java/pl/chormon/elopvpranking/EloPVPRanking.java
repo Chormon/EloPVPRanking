@@ -41,7 +41,7 @@ import pl.chormon.utils.MsgUtils;
  */
 public class EloPVPRanking extends JavaPlugin {
 
-    private static final String version = "1.0.4";
+    private static final String version = "1.0.5";
 
     private static EloPVPRanking plugin;
     private EloFile eloFile;
