@@ -21,13 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package pl.chormon.elopvpranking.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import pl.chormon.elopvpranking.Config;
 import pl.chormon.elopvpranking.EloPVPRanking;
 import pl.chormon.utils.MsgUtils;
 
@@ -35,22 +34,30 @@ import pl.chormon.utils.MsgUtils;
  *
  * @author Chormon
  */
-public class CmdEloReload implements CommandExecutor {
+public class CmdEloReload extends EloCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(args.length > 0)
-            return false;
+        if (args.length > 0) {
+            printTooManyArgs(sender);
+            return true;
+        }
         EloPVPRanking plugin = EloPVPRanking.get();
         plugin.reloadConfig();
         plugin.eloPlayers.clear();
         plugin.getEloFile().reloadConfig();
         plugin.eloPlayers.putAll(plugin.getEloFile().getPlayers());
-        if(sender instanceof Player)
+        if (sender instanceof Player) {
             MsgUtils.msg(sender, "&2Plugin reloaded!");
-        else
+        } else {
             MsgUtils.info("Plugin reloaded!");
+        }
         return true;
     }
-    
+
+    @Override
+    protected void printUsage(CommandSender sender) {
+        MsgUtils.msg(sender, Config.getMessage("usage"), "{command}", "/eloreload");
+    }
+
 }

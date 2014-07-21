@@ -40,3 +40,4 @@ messages:
   tooManyArgs: "&4Za duzo argumentow!"
   notEnoughArgs: "&4Za malo arguentow!"
   usage: "&2Uzycie: &f{command}"
+  integer: "&4Strona musi byc liczba calkowita wieksza od zera!"

@@ -26,7 +26,6 @@ package pl.chormon.elopvpranking.commands;
 import java.util.Map;
 import java.util.TreeMap;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import pl.chormon.elopvpranking.Config;
 import pl.chormon.elopvpranking.EloPVPRanking;
@@ -38,20 +37,28 @@ import pl.chormon.utils.MsgUtils;
  *
  * @author Chormon
  */
-public class CmdEloTop implements CommandExecutor {
+public class CmdEloTop extends EloCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         EloPVPRanking plugin = EloPVPRanking.get();
         int page = 1;
+        if (args.length > 1) {
+            printTooManyArgs(sender);
+            return true;
+        }
         if (args.length > 0) {
             try {
                 page = Integer.parseInt(args[0]);
             } catch (Exception e) {
-                return false;
+                MsgUtils.msg(sender, Config.getMessage("integer"));
+                printUsage(sender);
+                return true;
             }
             if (page < 1) {
-                return false;
+                MsgUtils.msg(sender, Config.getMessage("integer"));
+                printUsage(sender);
+                return true;
             }
         }
         int amount = Config.getPlayersTop() > plugin.eloPlayers.size() ? plugin.eloPlayers.size() : Config.getPlayersTop();
@@ -91,6 +98,11 @@ public class CmdEloTop implements CommandExecutor {
             MsgUtils.msg(sender, Config.getMessage("topMore"), "{page}", mypage + 1);
         }
         return true;
+    }
+
+    @Override
+    protected void printUsage(CommandSender sender) {
+        MsgUtils.msg(sender, Config.getMessage("usage"), "{command}", "/elotop [strona]");
     }
 
 }

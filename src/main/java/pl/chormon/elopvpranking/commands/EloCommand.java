@@ -21,39 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package pl.chormon.elopvpranking.commands;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import pl.chormon.elopvpranking.Config;
-import pl.chormon.elopvpranking.EloPVPRanking;
 import pl.chormon.utils.MsgUtils;
 
 /**
  *
  * @author Chormon
  */
-public class CmdEloInfo extends EloCommand {
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (args.length > 0) {
-            printTooManyArgs(sender);
-            return true;
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append("&2Wersja: &f");
-        sb.append(EloPVPRanking.getVersion());
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2-----[&f EloPVPRanking &2]-----"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', sb.toString()));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Autor: &fChormon"));
-        return true;
+public abstract class EloCommand implements CommandExecutor {
+    
+    protected abstract void printUsage(CommandSender sender);
+    protected void printNotEnoughArgs(CommandSender sender) {
+        MsgUtils.msg(sender, "notEnoughArgs");
+        printUsage(sender);
     }
-
-    @Override
-    protected void printUsage(CommandSender sender) {
-        MsgUtils.msg(sender, Config.getMessage("usage"), "{command}", "/eloinfo");
+    protected void printTooManyArgs(CommandSender sender) {
+        MsgUtils.msg(sender, "tooManyArgs");
+        printUsage(sender);
     }
-
+    
 }

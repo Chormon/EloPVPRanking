@@ -25,7 +25,6 @@ package pl.chormon.elopvpranking.commands;
 
 import java.util.List;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.chormon.elopvpranking.Config;
@@ -37,17 +36,22 @@ import pl.chormon.utils.MsgUtils;
  *
  * @author Chormon
  */
-public class CmdElo implements CommandExecutor {
+public class CmdElo extends EloCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         EloPVPRanking plugin = EloPVPRanking.get();
+        boolean senderIsConsole = false;
+        if (!(sender instanceof Player)) {
+            senderIsConsole = true;
+        }
+        if (args.length > 1) {
+            printTooManyArgs(sender);
+            return true;
+        }
         if (args.length > 0) {
-            if (args.length > 1) {
-                return false;
-            }
             String name = args[0].toLowerCase();
-            if (sender.hasPermission("elopvpranking.elo.others") || !(sender instanceof Player)) {
+            if (sender.hasPermission("elopvpranking.elo.others") || senderIsConsole) {
                 EloPlayer ep = plugin.eloPlayers.get(name);
                 if (ep == null) {
                     MsgUtils.msg(sender, Config.getMessage("playerNotExist"), "{player}", name);
@@ -64,8 +68,9 @@ public class CmdElo implements CommandExecutor {
                 return true;
             } else {
                 MsgUtils.msg(sender, "&4Nie masz do tego uprawnień!");
+                return true;
             }
-        } else if (sender instanceof Player) {
+        } else if (!senderIsConsole) {
             EloPlayer ep = plugin.eloPlayers.get(((Player) sender).getName().toLowerCase());
             if (ep != null) {
                 displayElo(sender, true, ep);
@@ -73,11 +78,13 @@ public class CmdElo implements CommandExecutor {
                 MsgUtils.msg(sender, Config.getMessage("error"));
             }
             return true;
+        } else {
+            printNotEnoughArgs(sender);
+            return true;
         }
-        return false;
     }
 
-    public void displayElo(CommandSender sender, boolean self, EloPlayer ep) {
+    protected void displayElo(CommandSender sender, boolean self, EloPlayer ep) {
         if (self) {
             MsgUtils.msg(sender, Config.getMessage("eloHeader"));
         } else {
@@ -113,6 +120,11 @@ public class CmdElo implements CommandExecutor {
         }
         MsgUtils.msg(sender, Config.getMessage("lastKills"), "{players}", sb1.toString());
         MsgUtils.msg(sender, Config.getMessage("lastDeaths"), "{players}", sb2.toString());
+    }
+
+    @Override
+    protected void printUsage(CommandSender sender) {
+        MsgUtils.msg(sender, Config.getMessage("usage"), "{command}", "/elo [gracz]");
     }
 
 }
