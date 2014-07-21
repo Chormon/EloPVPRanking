@@ -6,7 +6,7 @@ settings:
   playersPerPage: 7
   logPointsChange: true
   # liczba calkowita z zakresu <-2147483648; 2147483647>
-  maxPoints: "3200"
+  maxPoints: 3200
   # liczba calkowita z zakresu <-2147483648; 2147483647>
   minPoints: 0
   # ilosc zapamietanych ostatnich zabojstw

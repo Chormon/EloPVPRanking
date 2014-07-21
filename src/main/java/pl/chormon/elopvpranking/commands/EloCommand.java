@@ -26,6 +26,7 @@ package pl.chormon.elopvpranking.commands;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import pl.chormon.elopvpranking.Config;
 import pl.chormon.utils.MsgUtils;
 
 /**
@@ -36,11 +37,11 @@ public abstract class EloCommand implements CommandExecutor {
     
     protected abstract void printUsage(CommandSender sender);
     protected void printNotEnoughArgs(CommandSender sender) {
-        MsgUtils.msg(sender, "notEnoughArgs");
+        MsgUtils.msg(sender, Config.getMessage("notEnoughArgs"));
         printUsage(sender);
     }
     protected void printTooManyArgs(CommandSender sender) {
-        MsgUtils.msg(sender, "tooManyArgs");
+        MsgUtils.msg(sender, Config.getMessage("tooManyArgs"));
         printUsage(sender);
     }
     
