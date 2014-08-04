@@ -20,6 +20,10 @@ commands:
     description: Informacje o pluginie
     permission: elopvpranking.eloinfo
     usage: /<command>
+  eloreset:
+    description: Wyzeruj ranking gracza
+    permission: elopvpranking.eloremove
+    usage: /<command>
 permissions:
   elopvpranking.*:
     description: Pozwala na uzycie wszystkich komend pluginu EloPVPRating
@@ -43,5 +47,8 @@ permissions:
     default: op
   elopvpranking.eloinfo:
     description: Pozwala na wyswietlenie informacji o pluginie
+    default: true
+  elopvpranking.eloreset:
+    description: Pozwala na wyzerowanie rankingu gracza
     default: op
       

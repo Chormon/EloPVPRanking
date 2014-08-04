@@ -90,15 +90,13 @@ public class PlayerOnDeath implements Listener {
         victim.setEloPoints(Rvn);
         victim.addDeath(killer);
         victim.save();
-        MsgUtils.msg(EloPVPRanking.get().getServer().getPlayer(victim.getUniqueId()), Config.getMessage("lostPoints"), "{lost}", Rv - Rvn, "{points}", Rvn, "{ranking}", victim.getRanking());
-        if (Config.getLogPointsChange()) {
-            MsgUtils.info("Player &f{player} &rlost &f{lost} &rpoints and now has &f{points}&r.", "{player}", victim.getName(), "{lost}", Rv - Rvn, "{points}", Rvn);
-        }
         killer.setEloPoints(Rkn);
         killer.addKill(victim);
         killer.save();
+        MsgUtils.msg(EloPVPRanking.get().getServer().getPlayer(victim.getUniqueId()), Config.getMessage("lostPoints"), "{lost}", Rv - Rvn, "{points}", Rvn, "{ranking}", victim.getRanking());
         MsgUtils.msg(EloPVPRanking.get().getServer().getPlayer(killer.getUniqueId()), Config.getMessage("gainedPoints"), "{gained}", Rkn - Rk, "{points}", Rkn, "{ranking}", killer.getRanking());
         if (Config.getLogPointsChange()) {
+            MsgUtils.info("Player &f{player} &rlost &f{lost} &rpoints and now has &f{points}&r.", "{player}", victim.getName(), "{lost}", Rv - Rvn, "{points}", Rvn);
             MsgUtils.info("Player &f{player}&r gained &f{gained} &rpoints and now has &f{points}&r.", "{player}", killer.getName(), "{gained}", Rkn - Rk, "{points}", Rkn);
         }
     }

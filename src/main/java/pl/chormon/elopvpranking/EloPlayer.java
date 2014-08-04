@@ -66,7 +66,7 @@ public class EloPlayer implements Comparable<EloPlayer> {
         this.lastDeaths = new ArrayList<>();
         this.lastVisit = new Date();
     }
-    
+
     public EloPlayer(UUID uniqueId, String name, int eloPoints, int kills, int deaths, List<String> lastKills, List<String> lastDeaths, Date lastVisit) {
         this.uniqueId = uniqueId;
         this.name = name;
@@ -95,6 +95,15 @@ public class EloPlayer implements Comparable<EloPlayer> {
             return;
         }
         EloPVPRanking.get().eloPlayers.put(name.toLowerCase(), this);
+    }
+
+    public void reset() {
+        if (EloPVPRanking.get().eloPlayers.containsKey(name.toLowerCase())) {
+            EloPlayer ep = new EloPlayer(this.getUniqueId(), this.getName(), Config.getStartingPoints(), 0, 0, new ArrayList<String>(), new ArrayList<String>(), new Date());
+            EloPVPRanking.get().getEloFile().savePlayer(ep);
+            EloPVPRanking.get().eloPlayers.remove(name.toLowerCase());
+            EloPVPRanking.get().eloPlayers.put(name.toLowerCase(), ep);
+        }
     }
 
     public UUID getUniqueId() {
@@ -136,7 +145,7 @@ public class EloPlayer implements Comparable<EloPlayer> {
         lastDeaths.add(ep.getName());
         deaths++;
     }
-    
+
     public void setLastVisit() {
         lastVisit = new Date();
     }

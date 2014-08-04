@@ -41,3 +41,5 @@ messages:
   notEnoughArgs: "&4Za malo arguentow!"
   usage: "&2Uzycie: &f{command}"
   integer: "&4Strona musi byc liczba calkowita wieksza od zera!"
+  rankingNotReseted: "&4Wystapil blad i nie mozna bylo zresetowac rankingu gracza &f{player}&4!"
+  rankingReseted: "&2Zresetowano ranking gracza &f{player} &2."

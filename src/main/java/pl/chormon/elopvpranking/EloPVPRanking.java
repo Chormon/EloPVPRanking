@@ -41,7 +41,7 @@ import pl.chormon.utils.MsgUtils;
  */
 public class EloPVPRanking extends JavaPlugin {
 
-    private static final String version = "1.0.5";
+    private static final String version = "1.0.6";
 
     private static EloPVPRanking plugin;
     private EloFile eloFile;
@@ -66,6 +66,7 @@ public class EloPVPRanking extends JavaPlugin {
         getCommand("Elotop").setExecutor(new CmdEloTop());
         getCommand("EloReload").setExecutor(new CmdEloReload());
         getCommand("EloInfo").setExecutor(new CmdEloInfo());
+        getCommand("EloReset").setExecutor(new CmdEloReset());
         new InactivePlayerRemover(Config.getRemoveAfter()).runTaskTimer(plugin, 0L, 72000);
         MsgUtils.info("{name} {version} enabled!", "{name}", pdf.getName(), "{version}", pdf.getVersion());
     }

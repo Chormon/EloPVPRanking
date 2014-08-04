@@ -42,9 +42,13 @@ public class MsgUtils {
     public static void setConsole(ConsoleCommandSender console) {
         MsgUtils.console = console;
     }
-    
+
     private static void log(String msg, Object... vars) {
-        msg(MsgUtils.console, prefix + msg, vars);
+        try {
+            msg(MsgUtils.console, prefix + msg, vars);
+        } catch (Exception ex) {
+
+        }
     }
 
     public static void info(String msg) {
@@ -76,7 +80,11 @@ public class MsgUtils {
     }
 
     public static void msg(CommandSender cs, String msg, Object... vars) {
-        cs.sendMessage(fixMsg(msg, vars));
+        try {
+            cs.sendMessage(fixMsg(msg, vars));
+        } catch (Exception ex) {
+
+        }
     }
 
     private static String fixMsg(String msg, Object... vars) {
